@@ -15,12 +15,11 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ICSharpCode.ILSpy.ViewModels
 {
-	public abstract class ViewModelBase : ObservableObject
-	{
-	}
+    public abstract class ViewModelBase : ObservableObject
+    {
+    }
 }

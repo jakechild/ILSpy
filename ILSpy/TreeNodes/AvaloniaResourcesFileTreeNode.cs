@@ -15,70 +15,311 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Composition;
 using System.IO;
 using System.Linq;
-
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.Metadata;
 using ICSharpCode.Decompiler.Util;
 using ICSharpCode.ILSpyX.Abstractions;
-
 using ICSharpCode.ILSpy.Languages;
 
 namespace ICSharpCode.ILSpy.TreeNodes
 {
-	[Export(typeof(IResourceNodeFactory))]
-	[Shared]
-	sealed class AvaloniaResourcesFileTreeNodeFactory : IResourceNodeFactory
-	{
-		public ITreeNode? CreateNode(Resource resource)
-		{
-			if (AvaloniaResourcesFile.IsAvaloniaResourcesEntry(resource.Name))
-				return new AvaloniaResourcesFileTreeNode(resource);
-			return null;
-		}
-	}
+    [Export(typeof(IResourceNodeFactory))]
+    [Shared]
+    sealed class AvaloniaResourcesFileTreeNodeFactory : IResourceNodeFactory
+    {
+        public ITreeNode? CreateNode(Resource resource)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "a03ba21d-ca9e-451b-9c60-c663b9cba41c" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            if (AvaloniaResourcesFile.IsAvaloniaResourcesEntry(resource.Name))
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "6ac37806-5660-4fea-bced-19c2adb77417" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                return new AvaloniaResourcesFileTreeNode(resource);
+            }
 
-	/// <summary>
-	/// The <c>!AvaloniaResources</c> manifest resource an Avalonia application embeds. It packs
-	/// every Avalonia resource (compiled XAML, images, ...) behind a single index; each packed
-	/// file is unpacked into a <see cref="ResourceEntryNode"/> child that can be viewed and saved
-	/// individually.
-	/// </summary>
-	public sealed class AvaloniaResourcesFileTreeNode : ResourceTreeNode
-	{
-		public AvaloniaResourcesFileTreeNode(Resource r) : base(r)
-		{
-			LazyLoading = true;
-		}
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "b2b3a8e8-f49d-4273-b0d5-9322ea9f6afd" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            return null;
+        }
+    }
 
-		public override object Icon => Images.ResourceResourcesFile;
+    /// <summary>
+    /// The <c>!AvaloniaResources</c> manifest resource an Avalonia application embeds. It packs
+    /// every Avalonia resource (compiled XAML, images, ...) behind a single index; each packed
+    /// file is unpacked into a <see cref="ResourceEntryNode"/> child that can be viewed and saved
+    /// individually.
+    /// </summary>
+    public sealed class AvaloniaResourcesFileTreeNode : ResourceTreeNode
+    {
+        public AvaloniaResourcesFileTreeNode(Resource r) : base(r)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "c33e12c7-a84f-46f2-b5f3-f9d9fc053007" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            LazyLoading = true;
+        }
 
-		protected override void LoadChildren()
-		{
-			// Unlike ResourcesFile, AvaloniaResourcesFile copies everything out of the stream in
-			// its constructor, so the stream can be disposed as soon as parsing is done.
-			using var s = Resource.TryOpenStream();
-			if (s == null)
-				return;
-			s.Position = 0;
-			try
-			{
-				foreach (var entry in new AvaloniaResourcesFile(s).OrderBy(e => e.Key, NaturalStringComparer.Instance))
-					Children.Add(ResourceEntryNode.Create(entry.Key, entry.Value));
-			}
-			catch (BadImageFormatException) { /* malformed — ignore */ }
-			catch (EndOfStreamException) { /* truncated — ignore */ }
-		}
+        public override object Icon => Images.ResourceResourcesFile;
 
-		public override void Decompile(Language language, ITextOutput output, DecompilationOptions options)
-		{
-			EnsureLazyChildren();
-			base.Decompile(language, output, options);
-			WriteEntryList(output);
-		}
-	}
+        protected override void LoadChildren()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "ee484fea-f9f0-46e4-9a18-ff6c96fc8f2d" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            // Unlike ResourcesFile, AvaloniaResourcesFile copies everything out of the stream in
+            // its constructor, so the stream can be disposed as soon as parsing is done.
+            using var s = Resource.TryOpenStream();
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "1159fd27-bb5d-40b3-a1d9-2ddfbc3d61d6" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            if (s == null)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "088467df-16e0-4936-9ea7-9617a943f80b" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                return;
+            }
+
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "f8102a49-86e4-4cf7-a7d0-7b1bb3ead7e1" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            s.Position = 0;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "8cffb4dd-bb47-475e-ae9c-0134d16b4c81" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            try
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "08b92f3e-7cd1-44e0-bac1-4eed2bd84e31" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                foreach (var entry in new AvaloniaResourcesFile(s).OrderBy(e => e.Key, NaturalStringComparer.Instance))
+                    Children.Add(ResourceEntryNode.Create(entry.Key, entry.Value));
+            }
+            catch (BadImageFormatException)
+            { /* malformed — ignore */
+            }
+            catch (EndOfStreamException)
+            { /* truncated — ignore */
+            }
+        }
+
+        public override void Decompile(Language language, ITextOutput output, DecompilationOptions options)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "ec78b8aa-2044-4813-a995-867140845948" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            EnsureLazyChildren();
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "e39c9bb0-0448-41f1-a80c-8b4a80f3ffa8" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            base.Decompile(language, output, options);
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "6975a91c-2c53-48f0-9c1a-e73cb4a48f2f" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            WriteEntryList(output);
+        }
+    }
 }

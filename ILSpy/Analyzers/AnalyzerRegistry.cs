@@ -15,36 +15,49 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-
 using ICSharpCode.ILSpyX.Analyzers;
 
 namespace ICSharpCode.ILSpy.Analyzers
 {
-	/// <summary>
-	/// MEF aggregator for <see cref="ExportAnalyzerAttribute"/>-tagged analyzers. System.Composition
-	/// only resolves <c>[ImportMany]</c> with metadata through constructor injection, so this
-	/// registry is the single place that pulls the factories out of the composition host. Each
-	/// <see cref="AnalyzerEntityTreeNode"/> reads <see cref="Analyzers"/> through the static
-	/// accessor on <see cref="AnalyzerTreeNode"/>, which resolves this shared registry from the
-	/// current composition host on each access.
-	/// </summary>
-	[Export]
-	[Shared]
-	public sealed class AnalyzerRegistry
-	{
-		[ImportingConstructor]
-		public AnalyzerRegistry(
-			[ImportMany("Analyzer")] IEnumerable<ExportFactory<IAnalyzer, AnalyzerMetadata>> analyzers)
-		{
-			Analyzers = analyzers
-				.OrderBy(a => a.Metadata?.Order ?? 0)
-				.ToArray();
-		}
+    /// <summary>
+    /// MEF aggregator for <see cref="ExportAnalyzerAttribute"/>-tagged analyzers. System.Composition
+    /// only resolves <c>[ImportMany]</c> with metadata through constructor injection, so this
+    /// registry is the single place that pulls the factories out of the composition host. Each
+    /// <see cref="AnalyzerEntityTreeNode"/> reads <see cref="Analyzers"/> through the static
+    /// accessor on <see cref="AnalyzerTreeNode"/>, which resolves this shared registry from the
+    /// current composition host on each access.
+    /// </summary>
+    [Export]
+    [Shared]
+    public sealed class AnalyzerRegistry
+    {
+        [ImportingConstructor]
+        public AnalyzerRegistry([ImportMany("Analyzer")] IEnumerable<ExportFactory<IAnalyzer, AnalyzerMetadata>> analyzers)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "4850c6d3-3a43-4fae-8845-0ef75b8ab8df" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Analyzers = analyzers.OrderBy(a => a.Metadata?.Order ?? 0).ToArray();
+        }
 
-		public IReadOnlyList<ExportFactory<IAnalyzer, AnalyzerMetadata>> Analyzers { get; }
-	}
+        public IReadOnlyList<ExportFactory<IAnalyzer, AnalyzerMetadata>> Analyzers { get; }
+    }
 }

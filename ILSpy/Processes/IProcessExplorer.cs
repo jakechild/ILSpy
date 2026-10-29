@@ -15,29 +15,27 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace ICSharpCode.ILSpy.Processes
 {
-	/// <summary>
-	/// Enumerates running .NET processes and the managed assemblies loaded in them.
-	/// Abstracted so the "Open from Running Process" dialog's view model can be driven by a
-	/// fake in headless tests, without live processes or IPC.
-	/// </summary>
-	public interface IProcessExplorer
-	{
-		/// <summary>
-		/// Lists the running .NET processes visible to the current user. Unreachable
-		/// processes (exited mid-scan, access denied, hung) are silently skipped.
-		/// </summary>
-		Task<IReadOnlyList<RunningDotNetProcess>> GetProcessesAsync(CancellationToken cancellationToken);
-
-		/// <summary>
-		/// Lists the managed assemblies currently loaded in <paramref name="process"/>.
-		/// </summary>
-		Task<IReadOnlyList<ProcessModuleInfo>> GetModulesAsync(RunningDotNetProcess process, CancellationToken cancellationToken);
-	}
+    /// <summary>
+    /// Enumerates running .NET processes and the managed assemblies loaded in them.
+    /// Abstracted so the "Open from Running Process" dialog's view model can be driven by a
+    /// fake in headless tests, without live processes or IPC.
+    /// </summary>
+    public interface IProcessExplorer
+    {
+        /// <summary>
+        /// Lists the running .NET processes visible to the current user. Unreachable
+        /// processes (exited mid-scan, access denied, hung) are silently skipped.
+        /// </summary>
+        Task<IReadOnlyList<RunningDotNetProcess>> GetProcessesAsync(CancellationToken cancellationToken);
+        /// <summary>
+        /// Lists the managed assemblies currently loaded in <paramref name="process"/>.
+        /// </summary>
+        Task<IReadOnlyList<ProcessModuleInfo>> GetModulesAsync(RunningDotNetProcess process, CancellationToken cancellationToken);
+    }
 }

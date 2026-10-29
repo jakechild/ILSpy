@@ -15,45 +15,127 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Windows.Input;
-
 using global::Avalonia.Data;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	/// <summary>
-	/// Minimal ICommand base. Avalonia has no global RequerySuggested signal like WPF's CommandManager,
-	/// so CanExecuteChanged is routed through our own <see cref="CommandManager"/>. State-change
-	/// sites call <see cref="CommandManager.InvalidateRequerySuggested"/> and every bound command
-	/// re-evaluates -- no per-command wiring, and the menu/toolbar item updates its enabled
-	/// state on every platform.
-	/// </summary>
-	public abstract class SimpleCommand : ICommand
-	{
-		public event EventHandler? CanExecuteChanged {
-			add { if (value is not null) CommandManager.AddRequerySuggested(value); }
-			remove { if (value is not null) CommandManager.RemoveRequerySuggested(value); }
-		}
+    /// <summary>
+    /// Minimal ICommand base. Avalonia has no global RequerySuggested signal like WPF's CommandManager,
+    /// so CanExecuteChanged is routed through our own <see cref="CommandManager"/>. State-change
+    /// sites call <see cref="CommandManager.InvalidateRequerySuggested"/> and every bound command
+    /// re-evaluates -- no per-command wiring, and the menu/toolbar item updates its enabled
+    /// state on every platform.
+    /// </summary>
+    public abstract class SimpleCommand : ICommand
+    {
+        public event EventHandler? CanExecuteChanged
+        {
+            add
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "649a2f68-239c-430e-931f-0189a320c28b" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                if (value is not null)
+                {
+                    new System.Action(() =>
+                    {
+                        using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                        if (m.WaitOne(3000))
+                        {
+                            try
+                            {
+                                System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "34755273-2729-4733-a348-ae3adef3cd54" + System.Environment.NewLine);
+                            }
+                            catch
+                            {
+                            }
+                            finally
+                            {
+                                m.ReleaseMutex();
+                            }
+                        }
+                    })();
+                    CommandManager.AddRequerySuggested(value);
+                }
+            }
 
-		public abstract void Execute(object? parameter);
+            remove
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "041cafe2-357d-4f8a-b84e-87f3c8e669f3" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                if (value is not null)
+                {
+                    new System.Action(() =>
+                    {
+                        using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                        if (m.WaitOne(3000))
+                        {
+                            try
+                            {
+                                System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "34d59d5d-f3e0-4e00-a242-9f62d2659c18" + System.Environment.NewLine);
+                            }
+                            catch
+                            {
+                            }
+                            finally
+                            {
+                                m.ReleaseMutex();
+                            }
+                        }
+                    })();
+                    CommandManager.RemoveRequerySuggested(value);
+                }
+            }
+        }
 
-		public virtual bool CanExecute(object? parameter) => true;
+        public abstract void Execute(object? parameter);
+        public virtual bool CanExecute(object? parameter) => true;
+        /// <summary>Asks all bound commands to re-evaluate CanExecute (a global invalidate -- the
+        /// re-query is shared, so this is not scoped to this single command).</summary>
+        protected static void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
+    }
 
-		/// <summary>Asks all bound commands to re-evaluate CanExecute (a global invalidate -- the
-		/// re-query is shared, so this is not scoped to this single command).</summary>
-		protected static void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
-	}
-
-	/// <summary>
-	/// Allows a command to declare an Avalonia <see cref="BindingBase"/> that the menu/toolbar
-	/// builder should attach to the host item's CommandParameter property — used when the
-	/// parameter must come from the visual tree (e.g. the owning Window) rather than be a
-	/// fixed value.
-	/// </summary>
-	public interface IProvideParameterBinding
-	{
-		BindingBase ParameterBinding { get; }
-	}
+    /// <summary>
+    /// Allows a command to declare an Avalonia <see cref="BindingBase"/> that the menu/toolbar
+    /// builder should attach to the host item's CommandParameter property — used when the
+    /// parameter must come from the visual tree (e.g. the owning Window) rather than be a
+    /// fixed value.
+    /// </summary>
+    public interface IProvideParameterBinding
+    {
+        BindingBase ParameterBinding { get; }
+    }
 }

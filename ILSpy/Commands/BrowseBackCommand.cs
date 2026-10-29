@@ -15,58 +15,35 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Composition;
 using System.Windows.Input;
-
 using ICSharpCode.ILSpy.Properties;
-
 using ICSharpCode.ILSpy.Docking;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	[ExportMainMenuCommand(
-		ParentMenuID = nameof(Resources._View),
-		Header = nameof(Resources.Back),
-		MenuIcon = "Images/Back",
-		MenuCategory = nameof(Resources.Navigation),
-		InputGestureText = "Alt+Left",
-		MenuOrder = 0)]
-	[Shared]
-	[method: ImportingConstructor]
-	sealed class BrowseBackCommand(DockWorkspace dockWorkspace) : ICommand
-	{
-		readonly ICommand inner = dockWorkspace.NavigateBackCommand;
+    [ExportMainMenuCommand(ParentMenuID = nameof(Resources._View), Header = nameof(Resources.Back), MenuIcon = "Images/Back", MenuCategory = nameof(Resources.Navigation), InputGestureText = "Alt+Left", MenuOrder = 0)]
+    [Shared]
+    [method: ImportingConstructor]
+    sealed class BrowseBackCommand(DockWorkspace dockWorkspace) : ICommand
+    {
+        readonly ICommand inner = dockWorkspace.NavigateBackCommand;
+        public event EventHandler? CanExecuteChanged { add => inner.CanExecuteChanged += value; remove => inner.CanExecuteChanged -= value; }
 
-		public event EventHandler? CanExecuteChanged {
-			add => inner.CanExecuteChanged += value;
-			remove => inner.CanExecuteChanged -= value;
-		}
+        public bool CanExecute(object? parameter) => inner.CanExecute(parameter);
+        public void Execute(object? parameter) => inner.Execute(parameter);
+    }
 
-		public bool CanExecute(object? parameter) => inner.CanExecute(parameter);
-		public void Execute(object? parameter) => inner.Execute(parameter);
-	}
+    [ExportMainMenuCommand(ParentMenuID = nameof(Resources._View), Header = nameof(Resources.Forward), MenuIcon = "Images/Forward", MenuCategory = nameof(Resources.Navigation), InputGestureText = "Alt+Right", MenuOrder = 1)]
+    [Shared]
+    [method: ImportingConstructor]
+    sealed class BrowseForwardCommand(DockWorkspace dockWorkspace) : ICommand
+    {
+        readonly ICommand inner = dockWorkspace.NavigateForwardCommand;
+        public event EventHandler? CanExecuteChanged { add => inner.CanExecuteChanged += value; remove => inner.CanExecuteChanged -= value; }
 
-	[ExportMainMenuCommand(
-		ParentMenuID = nameof(Resources._View),
-		Header = nameof(Resources.Forward),
-		MenuIcon = "Images/Forward",
-		MenuCategory = nameof(Resources.Navigation),
-		InputGestureText = "Alt+Right",
-		MenuOrder = 1)]
-	[Shared]
-	[method: ImportingConstructor]
-	sealed class BrowseForwardCommand(DockWorkspace dockWorkspace) : ICommand
-	{
-		readonly ICommand inner = dockWorkspace.NavigateForwardCommand;
-
-		public event EventHandler? CanExecuteChanged {
-			add => inner.CanExecuteChanged += value;
-			remove => inner.CanExecuteChanged -= value;
-		}
-
-		public bool CanExecute(object? parameter) => inner.CanExecute(parameter);
-		public void Execute(object? parameter) => inner.Execute(parameter);
-	}
+        public bool CanExecute(object? parameter) => inner.CanExecute(parameter);
+        public void Execute(object? parameter) => inner.Execute(parameter);
+    }
 }

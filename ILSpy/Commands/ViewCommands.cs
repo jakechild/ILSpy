@@ -15,32 +15,28 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Composition;
-
 using ICSharpCode.ILSpy.Properties;
-
 using ICSharpCode.ILSpy.AssemblyTree;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	[ExportMainMenuCommand(ParentMenuID = nameof(Resources._View), Header = nameof(Resources.SortAssembly_listName), MenuIcon = "Images/Sort", MenuCategory = "Tree", MenuOrder = 10)]
-	[ExportToolbarCommand(ToolTip = nameof(Resources.SortAssemblyListName), ToolbarIcon = "Images/Sort", ToolbarCategory = nameof(Resources.View), ToolbarOrder = 0)]
-	[Shared]
-	[method: ImportingConstructor]
-	sealed class SortAssemblyListCommand(AssemblyTreeModel assemblyTreeModel) : SimpleCommand
-	{
-		public override void Execute(object? parameter) => assemblyTreeModel.SortAssemblyList();
-	}
+    [ExportMainMenuCommand(ParentMenuID = nameof(Resources._View), Header = nameof(Resources.SortAssembly_listName), MenuIcon = "Images/Sort", MenuCategory = "Tree", MenuOrder = 10)]
+    [ExportToolbarCommand(ToolTip = nameof(Resources.SortAssemblyListName), ToolbarIcon = "Images/Sort", ToolbarCategory = nameof(Resources.View), ToolbarOrder = 0)]
+    [Shared]
+    [method: ImportingConstructor]
+    sealed class SortAssemblyListCommand(AssemblyTreeModel assemblyTreeModel) : SimpleCommand
+    {
+        public override void Execute(object? parameter) => assemblyTreeModel.SortAssemblyList();
+    }
 
-	[ExportMainMenuCommand(ParentMenuID = nameof(Resources._View), Header = nameof(Resources._CollapseTreeNodes), MenuIcon = "Images/CollapseAll", MenuCategory = "Tree", MenuOrder = 11)]
-	[ExportToolbarCommand(ToolTip = nameof(Resources.CollapseTreeNodes), ToolbarIcon = "Images/CollapseAll", ToolbarCategory = nameof(Resources.View), ToolbarOrder = 1)]
-	[Shared]
-	[method: ImportingConstructor]
-	sealed class CollapseAllCommand(AssemblyTreeModel assemblyTreeModel) : SimpleCommand
-	{
-		public override void Execute(object? parameter) => assemblyTreeModel.CollapseAll();
-	}
-
-	// ShowOptionsCommand moved to its own file (Commands/ShowOptionsCommand.cs) — see there.
+    [ExportMainMenuCommand(ParentMenuID = nameof(Resources._View), Header = nameof(Resources._CollapseTreeNodes), MenuIcon = "Images/CollapseAll", MenuCategory = "Tree", MenuOrder = 11)]
+    [ExportToolbarCommand(ToolTip = nameof(Resources.CollapseTreeNodes), ToolbarIcon = "Images/CollapseAll", ToolbarCategory = nameof(Resources.View), ToolbarOrder = 1)]
+    [Shared]
+    [method: ImportingConstructor]
+    sealed class CollapseAllCommand(AssemblyTreeModel assemblyTreeModel) : SimpleCommand
+    {
+        public override void Execute(object? parameter) => assemblyTreeModel.CollapseAll();
+    }
+// ShowOptionsCommand moved to its own file (Commands/ShowOptionsCommand.cs) — see there.
 }

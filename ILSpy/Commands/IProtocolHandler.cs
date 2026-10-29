@@ -15,29 +15,26 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Reflection.Metadata;
-
 using ICSharpCode.Decompiler.Metadata;
-
 using ICSharpCode.ILSpy.TreeNodes;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	/// <summary>
-	/// Plug-in contract for resolving non-default reference protocols (e.g.
-	/// <c>metadata://</c>) to tree nodes. Implementations are MEF-discovered via
-	/// <c>[Export(typeof(IProtocolHandler))]</c> and consulted by
-	/// <see cref="Docking.DockWorkspace"/>'s navigation router; the first handler to
-	/// return a non-<c>null</c> node wins.
-	/// </summary>
-	public interface IProtocolHandler
-	{
-		/// <summary>
-		/// Resolves a reference to a tree node, or returns <c>null</c> to signal "not my
-		/// protocol". <paramref name="newTabPage"/> is set to <c>true</c> when the handler
-		/// wants the host to carve out a new tab instead of reusing the active one.
-		/// </summary>
-		ILSpyTreeNode? Resolve(string protocol, MetadataFile module, Handle handle, out bool newTabPage);
-	}
+    /// <summary>
+    /// Plug-in contract for resolving non-default reference protocols (e.g.
+    /// <c>metadata://</c>) to tree nodes. Implementations are MEF-discovered via
+    /// <c>[Export(typeof(IProtocolHandler))]</c> and consulted by
+    /// <see cref="Docking.DockWorkspace"/>'s navigation router; the first handler to
+    /// return a non-<c>null</c> node wins.
+    /// </summary>
+    public interface IProtocolHandler
+    {
+        /// <summary>
+        /// Resolves a reference to a tree node, or returns <c>null</c> to signal "not my
+        /// protocol". <paramref name="newTabPage"/> is set to <c>true</c> when the handler
+        /// wants the host to carve out a new tab instead of reusing the active one.
+        /// </summary>
+        ILSpyTreeNode? Resolve(string protocol, MetadataFile module, Handle handle, out bool newTabPage);
+    }
 }

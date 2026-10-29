@@ -15,78 +15,119 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
-
 using ICSharpCode.Decompiler.Metadata;
 
 namespace ICSharpCode.ILSpy.Metadata.CorTables
 {
-	/// <summary>
-	/// View of the Assembly table — at most one row, present only when the metadata file is
-	/// itself an assembly manifest (vs. a plain .netmodule). Carries the assembly's name,
-	/// culture, version, hash algorithm, and signing flags.
-	/// </summary>
-	public sealed class AssemblyTableTreeNode : MetadataTableTreeNode<AssemblyTableTreeNode.AssemblyEntry>
-	{
-		public AssemblyTableTreeNode(MetadataFile metadataFile)
-			: base(TableIndex.Assembly, metadataFile)
-		{
-		}
+    /// <summary>
+    /// View of the Assembly table — at most one row, present only when the metadata file is
+    /// itself an assembly manifest (vs. a plain .netmodule). Carries the assembly's name,
+    /// culture, version, hash algorithm, and signing flags.
+    /// </summary>
+    public sealed class AssemblyTableTreeNode : MetadataTableTreeNode<AssemblyTableTreeNode.AssemblyEntry>
+    {
+        public AssemblyTableTreeNode(MetadataFile metadataFile) : base(TableIndex.Assembly, metadataFile)
+        {
+        }
 
-		protected override IReadOnlyList<AssemblyEntry> LoadTable()
-			=> metadataFile.Metadata.IsAssembly
-				? [new AssemblyEntry(metadataFile.Metadata, metadataFile.MetadataOffset)]
-				: [];
+        protected override IReadOnlyList<AssemblyEntry> LoadTable() => metadataFile.Metadata.IsAssembly ? [new AssemblyEntry(metadataFile.Metadata, metadataFile.MetadataOffset)] : [];
+        public sealed class AssemblyEntry
+        {
+            readonly int metadataOffset;
+            readonly MetadataReader metadata;
+            readonly AssemblyDefinition assembly;
+            public int RID => MetadataTokens.GetRowNumber(EntityHandle.AssemblyDefinition);
 
-		public sealed class AssemblyEntry
-		{
-			readonly int metadataOffset;
-			readonly MetadataReader metadata;
-			readonly AssemblyDefinition assembly;
+            [ColumnInfo("X8")]
+            public int Token => MetadataTokens.GetToken(EntityHandle.AssemblyDefinition);
 
-			public int RID => MetadataTokens.GetRowNumber(EntityHandle.AssemblyDefinition);
+            [ColumnInfo("X8")]
+            public int Offset => GetRowOffset(metadata, metadataOffset, TableIndex.Assembly, RID);
 
-			[ColumnInfo("X8")]
-			public int Token => MetadataTokens.GetToken(EntityHandle.AssemblyDefinition);
+            [ColumnInfo("X4")]
+            public AssemblyHashAlgorithm HashAlgorithm => assembly.HashAlgorithm;
+            public object HashAlgorithmTooltip => new FlagsTooltip()
+            {
+                FlagGroup.CreateSingleChoiceGroup(typeof(AssemblyHashAlgorithm), selectedValue: (int)assembly.HashAlgorithm, defaultFlag: new Flag("None (0000)", 0, false), includeAny: false)
+            };
 
-			[ColumnInfo("X8")]
-			public int Offset => GetRowOffset(metadata, metadataOffset, TableIndex.Assembly, RID);
+            [ColumnInfo("X4")]
+            public AssemblyFlags Flags => assembly.Flags;
+            public object FlagsTooltip => new FlagsTooltip()
+            {
+                FlagGroup.CreateMultipleChoiceGroup(typeof(AssemblyFlags), selectedValue: (int)assembly.Flags, includeAll: false)
+            };
+            public Version Version => assembly.Version;
+            public string NameTooltip => $"{MetadataTokens.GetHeapOffset(assembly.Name):X} \"{Name}\"";
+            public string Name => metadata.GetString(assembly.Name);
+            public string CultureTooltip => $"{MetadataTokens.GetHeapOffset(assembly.Culture):X} \"{Culture}\"";
+            public string Culture => metadata.GetString(assembly.Culture);
 
-			[ColumnInfo("X4")]
-			public AssemblyHashAlgorithm HashAlgorithm => assembly.HashAlgorithm;
-
-			public object HashAlgorithmTooltip => new FlagsTooltip() {
-				FlagGroup.CreateSingleChoiceGroup(typeof(AssemblyHashAlgorithm), selectedValue: (int)assembly.HashAlgorithm, defaultFlag: new Flag("None (0000)", 0, false), includeAny: false)
-			};
-
-			[ColumnInfo("X4")]
-			public AssemblyFlags Flags => assembly.Flags;
-
-			public object FlagsTooltip => new FlagsTooltip() {
-				FlagGroup.CreateMultipleChoiceGroup(typeof(AssemblyFlags), selectedValue: (int)assembly.Flags, includeAll: false)
-			};
-
-			public Version Version => assembly.Version;
-
-			public string NameTooltip => $"{MetadataTokens.GetHeapOffset(assembly.Name):X} \"{Name}\"";
-
-			public string Name => metadata.GetString(assembly.Name);
-
-			public string CultureTooltip => $"{MetadataTokens.GetHeapOffset(assembly.Culture):X} \"{Culture}\"";
-
-			public string Culture => metadata.GetString(assembly.Culture);
-
-			public AssemblyEntry(MetadataReader metadata, int metadataOffset)
-			{
-				this.metadata = metadata;
-				this.metadataOffset = metadataOffset;
-				assembly = metadata.GetAssemblyDefinition();
-			}
-		}
-	}
+            public AssemblyEntry(MetadataReader metadata, int metadataOffset)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "373c9fb7-f79c-45ec-872a-5e1aaaa55c62" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.metadata = metadata;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "a5b9f326-12fc-44ae-9be3-46d1c984212f" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.metadataOffset = metadataOffset;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "579766b3-1004-4bda-9333-c766cde6e4dc" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                assembly = metadata.GetAssemblyDefinition();
+            }
+        }
+    }
 }

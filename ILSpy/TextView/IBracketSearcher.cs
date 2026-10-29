@@ -15,43 +15,113 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using AvaloniaEdit.Document;
 
 namespace ICSharpCode.ILSpy.TextView
 {
-	/// <summary>Language-specific bracket pair search. Returns the matched pair around
-	/// the caret offset (or <see langword="null"/> when no bracket is at the caret).</summary>
-	public interface IBracketSearcher
-	{
-		/// <summary>Searches for a matching bracket from <paramref name="offset"/> outward.
-		/// Returns positions and lengths of both brackets, or <c>null</c> for "no match".</summary>
-		BracketSearchResult? SearchBracket(IDocument document, int offset);
-	}
+    /// <summary>Language-specific bracket pair search. Returns the matched pair around
+    /// the caret offset (or <see langword="null"/> when no bracket is at the caret).</summary>
+    public interface IBracketSearcher
+    {
+        /// <summary>Searches for a matching bracket from <paramref name="offset"/> outward.
+        /// Returns positions and lengths of both brackets, or <c>null</c> for "no match".</summary>
+        BracketSearchResult? SearchBracket(IDocument document, int offset);
+    }
 
-	/// <summary>Pair of matched brackets located by <see cref="IBracketSearcher"/>.</summary>
-	public sealed class BracketSearchResult
-	{
-		public int OpeningBracketOffset { get; }
-		public int OpeningBracketLength { get; }
-		public int ClosingBracketOffset { get; }
-		public int ClosingBracketLength { get; }
+    /// <summary>Pair of matched brackets located by <see cref="IBracketSearcher"/>.</summary>
+    public sealed class BracketSearchResult
+    {
+        public int OpeningBracketOffset { get; }
+        public int OpeningBracketLength { get; }
+        public int ClosingBracketOffset { get; }
+        public int ClosingBracketLength { get; }
 
-		public BracketSearchResult(int openingBracketOffset, int openingBracketLength,
-			int closingBracketOffset, int closingBracketLength)
-		{
-			this.OpeningBracketOffset = openingBracketOffset;
-			this.OpeningBracketLength = openingBracketLength;
-			this.ClosingBracketOffset = closingBracketOffset;
-			this.ClosingBracketLength = closingBracketLength;
-		}
-	}
+        public BracketSearchResult(int openingBracketOffset, int openingBracketLength, int closingBracketOffset, int closingBracketLength)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "b873d32a-d9f6-4340-be0a-815ceac5ca30" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.OpeningBracketOffset = openingBracketOffset;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "e8eb86ff-6580-495e-b26d-cd9b0b8b8ff9" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.OpeningBracketLength = openingBracketLength;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "1be7d786-631f-4016-aa64-767e2800d00a" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.ClosingBracketOffset = closingBracketOffset;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "619af2e1-0b0b-42cc-8d10-63601c546e70" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.ClosingBracketLength = closingBracketLength;
+        }
+    }
 
-	/// <summary>No-op searcher used by languages that don't have a richer implementation
-	/// (every <see cref="Language"/> defaults to this; only C# overrides today).</summary>
-	public sealed class DefaultBracketSearcher : IBracketSearcher
-	{
-		public static readonly DefaultBracketSearcher DefaultInstance = new();
-		public BracketSearchResult? SearchBracket(IDocument document, int offset) => null;
-	}
+    /// <summary>No-op searcher used by languages that don't have a richer implementation
+    /// (every <see cref="Language"/> defaults to this; only C# overrides today).</summary>
+    public sealed class DefaultBracketSearcher : IBracketSearcher
+    {
+        public static readonly DefaultBracketSearcher DefaultInstance = new();
+        public BracketSearchResult? SearchBracket(IDocument document, int offset) => null;
+    }
 }

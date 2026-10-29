@@ -15,33 +15,45 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using ICSharpCode.ILSpy.Processes;
-
 using Loc = ICSharpCode.ILSpy.Properties.Resources;
 
 namespace ICSharpCode.ILSpy.ViewModels
 {
-	/// <summary>
-	/// One row of the assembly list: an assembly loaded in the selected process. Assemblies
-	/// that were loaded from a byte array or emitted at run time have no file to open, which
-	/// the location column states in place of a path.
-	/// </summary>
-	public sealed class ProcessModuleRowViewModel
-	{
-		public ProcessModuleRowViewModel(ProcessModuleInfo module)
-		{
-			Module = module;
-		}
+    /// <summary>
+    /// One row of the assembly list: an assembly loaded in the selected process. Assemblies
+    /// that were loaded from a byte array or emitted at run time have no file to open, which
+    /// the location column states in place of a path.
+    /// </summary>
+    public sealed class ProcessModuleRowViewModel
+    {
+        public ProcessModuleRowViewModel(ProcessModuleInfo module)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "25dd43d6-90a4-4c12-964e-3e6e598b2339" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Module = module;
+        }
 
-		public ProcessModuleInfo Module { get; }
-
-		public string Name => Module.Name;
-
-		public string? Path => Module.Path;
-
-		public bool IsInMemory => Module.IsInMemory;
-
-		public string Location => Module.Path ?? Loc.OpenFromProcess_InMemoryAssembly;
-	}
+        public ProcessModuleInfo Module { get; }
+        public string Name => Module.Name;
+        public string? Path => Module.Path;
+        public bool IsInMemory => Module.IsInMemory;
+        public string Location => Module.Path ?? Loc.OpenFromProcess_InMemoryAssembly;
+    }
 }

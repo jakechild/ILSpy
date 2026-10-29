@@ -15,36 +15,68 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Reflection.Metadata.Ecma335;
-
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.Metadata;
-
 using ICSharpCode.ILSpy.Languages;
 
 namespace ICSharpCode.ILSpy.Metadata
 {
-	/// <summary>
-	/// Universal placeholder used until a typed leaf is wired up for a given
-	/// <see cref="TableIndex"/>. Reports the table name and row count; gives the user
-	/// somewhere to land while the per-table viewers are filled in incrementally. Phase 1e
-	/// replaces this with one typed <see cref="MetadataTableTreeNode"/> subclass per table.
-	/// </summary>
-	public sealed class UnsupportedMetadataTableTreeNode : MetadataTableTreeNode
-	{
-		public UnsupportedMetadataTableTreeNode(TableIndex kind, MetadataFile metadataFile)
-			: base(kind, metadataFile)
-		{
-		}
+    /// <summary>
+    /// Universal placeholder used until a typed leaf is wired up for a given
+    /// <see cref="TableIndex"/>. Reports the table name and row count; gives the user
+    /// somewhere to land while the per-table viewers are filled in incrementally. Phase 1e
+    /// replaces this with one typed <see cref="MetadataTableTreeNode"/> subclass per table.
+    /// </summary>
+    public sealed class UnsupportedMetadataTableTreeNode : MetadataTableTreeNode
+    {
+        public UnsupportedMetadataTableTreeNode(TableIndex kind, MetadataFile metadataFile) : base(kind, metadataFile)
+        {
+        }
 
-		public override object Text => $"{(byte)Kind:X2} {Kind} ({RowCount})";
-		public override string ToString() => Kind.ToString();
+        public override object Text => $"{(byte)Kind:X2} {Kind} ({RowCount})";
 
-		public override void Decompile(Language language, ITextOutput output, DecompilationOptions options)
-		{
-			language.WriteCommentLine(output, $"{Kind}: {RowCount} rows");
-			language.WriteCommentLine(output, "Per-row content for this table ships in a future Avalonia release.");
-		}
-	}
+        public override string ToString() => Kind.ToString();
+        public override void Decompile(Language language, ITextOutput output, DecompilationOptions options)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "187e641a-c3ef-4525-b49e-616cd584e3b4" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            language.WriteCommentLine(output, $"{Kind}: {RowCount} rows");
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "0e786182-8df8-4c58-a61b-a0489da51586" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            language.WriteCommentLine(output, "Per-row content for this table ships in a future Avalonia release.");
+        }
+    }
 }

@@ -15,53 +15,101 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
-
 using ICSharpCode.Decompiler.Metadata;
-
 using ICSharpCode.ILSpy.ViewModels;
 
 namespace ICSharpCode.ILSpy.Metadata
 {
-	/// <summary>
-	/// View of #Blob — variable-length byte payloads holding signatures, marshalling info,
-	/// custom-attribute values, and similar binary data. Each entry is rendered as a hex
-	/// dump; full structural decoding (e.g. parsed type signatures) is out of scope for
-	/// the metadata viewer.
-	/// </summary>
-	public sealed class BlobHeapTreeNode : MetadataHeapTreeNode<BlobHeapTreeNode.BlobHeapEntry>
-	{
-		public BlobHeapTreeNode(MetadataFile metadataFile)
-			: base(HandleKind.Blob, metadataFile)
-		{
-		}
+    /// <summary>
+    /// View of #Blob — variable-length byte payloads holding signatures, marshalling info,
+    /// custom-attribute values, and similar binary data. Each entry is rendered as a hex
+    /// dump; full structural decoding (e.g. parsed type signatures) is out of scope for
+    /// the metadata viewer.
+    /// </summary>
+    public sealed class BlobHeapTreeNode : MetadataHeapTreeNode<BlobHeapTreeNode.BlobHeapEntry>
+    {
+        public BlobHeapTreeNode(MetadataFile metadataFile) : base(HandleKind.Blob, metadataFile)
+        {
+        }
 
-		protected override string HeapName => "Blob Heap";
+        protected override string HeapName => "Blob Heap";
 
-		protected override void LoadEntries(MetadataReader metadata, List<BlobHeapEntry> list)
-		{
-			WalkHeap(list, MetadataTokens.BlobHandle(0),
-				h => new BlobHeapEntry(metadata, h), metadata.GetNextHandle, h => h.IsNil);
-		}
+        protected override void LoadEntries(MetadataReader metadata, List<BlobHeapEntry> list)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "fa01f7d3-68c5-45a6-a3da-2895f2a67056" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            WalkHeap(list, MetadataTokens.BlobHandle(0), h => new BlobHeapEntry(metadata, h), metadata.GetNextHandle, h => h.IsNil);
+        }
 
-		public sealed class BlobHeapEntry
-		{
-			readonly MetadataReader metadata;
-			readonly BlobHandle handle;
+        public sealed class BlobHeapEntry
+        {
+            readonly MetadataReader metadata;
+            readonly BlobHandle handle;
+            [ColumnInfo("X8")]
+            public int Offset => metadata.GetHeapOffset(handle);
+            public int Length => metadata.GetBlobReader(handle).Length;
+            public string Value => metadata.GetBlobReader(handle).ToHexString();
 
-			[ColumnInfo("X8")]
-			public int Offset => metadata.GetHeapOffset(handle);
-			public int Length => metadata.GetBlobReader(handle).Length;
-			public string Value => metadata.GetBlobReader(handle).ToHexString();
-
-			public BlobHeapEntry(MetadataReader metadata, BlobHandle handle)
-			{
-				this.metadata = metadata;
-				this.handle = handle;
-			}
-		}
-	}
+            public BlobHeapEntry(MetadataReader metadata, BlobHandle handle)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "f404f8f9-52d8-4a5f-8d17-db0601dc38c0" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.metadata = metadata;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "4b1633e8-cf1b-4d68-ab57-5f0837aff599" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.handle = handle;
+            }
+        }
+    }
 }

@@ -15,19 +15,36 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using global::Avalonia.Controls;
 using global::Avalonia.Markup.Xaml;
 
 namespace ICSharpCode.ILSpy.Options.Panels
 {
-	public partial class MiscSettingsPanel : UserControl
-	{
-		public MiscSettingsPanel()
-		{
-			InitializeComponent();
-		}
+    public partial class MiscSettingsPanel : UserControl
+    {
+        public MiscSettingsPanel()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "99b9e2f3-cca5-4531-9f32-73bb1d099f39" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            InitializeComponent();
+        }
 
-		void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-	}
+        void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+    }
 }

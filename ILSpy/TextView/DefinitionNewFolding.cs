@@ -15,19 +15,18 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using AvaloniaEdit.Folding;
 
 namespace ICSharpCode.ILSpy.TextView
 {
-	/// <summary>
-	/// A definition-body fold whose logical region starts before the fold itself: at the first
-	/// output character of its entity declaration, so leading XML documentation comments and
-	/// attributes belong to the same toggle group. AvaloniaEdit keeps the instance reachable
-	/// through <see cref="FoldingSection.Tag"/>.
-	/// </summary>
-	sealed class DefinitionNewFolding : NewFolding
-	{
-		public int DefinitionStartOffset { get; set; }
-	}
+    /// <summary>
+    /// A definition-body fold whose logical region starts before the fold itself: at the first
+    /// output character of its entity declaration, so leading XML documentation comments and
+    /// attributes belong to the same toggle group. AvaloniaEdit keeps the instance reachable
+    /// through <see cref="FoldingSection.Tag"/>.
+    /// </summary>
+    sealed class DefinitionNewFolding : NewFolding
+    {
+        public int DefinitionStartOffset { get; set; }
+    }
 }

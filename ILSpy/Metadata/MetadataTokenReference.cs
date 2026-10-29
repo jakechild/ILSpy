@@ -15,18 +15,16 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Reflection.Metadata;
-
 using ICSharpCode.Decompiler.Metadata;
 
 namespace ICSharpCode.ILSpy.Metadata
 {
-	/// <summary>
-	/// A click target carrying a metadata token within a specific module. Emitted when the
-	/// user clicks a hyperlink-styled token cell in a metadata-grid view; the docking host
-	/// resolves it to the matching <see cref="MetadataTableTreeNode"/> and scrolls that
-	/// table's grid to the referenced row.
-	/// </summary>
-	public sealed record MetadataTokenReference(MetadataFile MetadataFile, Handle Handle);
+    /// <summary>
+    /// A click target carrying a metadata token within a specific module. Emitted when the
+    /// user clicks a hyperlink-styled token cell in a metadata-grid view; the docking host
+    /// resolves it to the matching <see cref="MetadataTableTreeNode"/> and scrolls that
+    /// table's grid to the referenced row.
+    /// </summary>
+    public sealed record MetadataTokenReference(MetadataFile MetadataFile, Handle Handle);
 }

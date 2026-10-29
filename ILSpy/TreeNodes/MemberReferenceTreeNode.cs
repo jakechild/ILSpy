@@ -15,54 +15,101 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 #nullable enable
-
 using System;
 using System.Reflection.Metadata;
-
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.Metadata;
 using ICSharpCode.Decompiler.Output;
 using ICSharpCode.Decompiler.TypeSystem;
-
 using ICSharpCode.ILSpy.Languages;
 
 namespace ICSharpCode.ILSpy.TreeNodes
 {
-	/// <summary>
-	/// One <c>MemberRef</c> entry inside <see cref="TypeReferenceTreeNode"/>: a method or
-	/// field used from this assembly that lives on a referenced one.
-	/// </summary>
-	public sealed class MemberReferenceTreeNode : ILSpyTreeNode
-	{
-		readonly MemberReferenceMetadata r;
-		readonly IMember resolvedMember;
+    /// <summary>
+    /// One <c>MemberRef</c> entry inside <see cref="TypeReferenceTreeNode"/>: a method or
+    /// field used from this assembly that lives on a referenced one.
+    /// </summary>
+    public sealed class MemberReferenceTreeNode : ILSpyTreeNode
+    {
+        readonly MemberReferenceMetadata r;
+        readonly IMember resolvedMember;
+        public MemberReferenceTreeNode(MetadataModule module, MemberReferenceMetadata r)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "4a000ee7-5614-42e2-aa4c-43cac55adc69" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            ArgumentNullException.ThrowIfNull(module);
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "6a89f172-d350-4486-9317-1992cc9c0394" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.r = r ?? throw new ArgumentNullException(nameof(r));
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "def7bd0f-1cae-4510-a5fc-7d894d27cc22" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.resolvedMember = r.MemberReferenceKind switch
+            {
+                MemberReferenceKind.Method => module.ResolveMethod(r.Handle, default),
+                MemberReferenceKind.Field => (IMember)module.ResolveEntity(r.Handle),
+                _ => throw new NotSupportedException(),
+            };
+        }
 
-		public MemberReferenceTreeNode(MetadataModule module, MemberReferenceMetadata r)
-		{
-			ArgumentNullException.ThrowIfNull(module);
-			this.r = r ?? throw new ArgumentNullException(nameof(r));
-			this.resolvedMember = r.MemberReferenceKind switch {
-				MemberReferenceKind.Method => module.ResolveMethod(r.Handle, default),
-				MemberReferenceKind.Field => (IMember)module.ResolveEntity(r.Handle),
-				_ => throw new NotSupportedException(),
-			};
-		}
+        public override object Text => Signature;
+        public override object NavigationText => $"{Text} ({ICSharpCode.ILSpy.Properties.Resources.ReferencedTypes})";
+        public override object Icon => r.MemberReferenceKind switch
+        {
+            MemberReferenceKind.Method => Images.MethodReference,
+            MemberReferenceKind.Field => Images.FieldReference,
+            _ => Images.TypeReference,
+        };
+        public string Signature => Language.EntityToString(resolvedMember, ConversionFlags.None);
 
-		public override object Text => Signature;
-
-		public override object NavigationText => $"{Text} ({ICSharpCode.ILSpy.Properties.Resources.ReferencedTypes})";
-
-		public override object Icon => r.MemberReferenceKind switch {
-			MemberReferenceKind.Method => Images.MethodReference,
-			MemberReferenceKind.Field => Images.FieldReference,
-			_ => Images.TypeReference,
-		};
-
-		public string Signature => Language.EntityToString(resolvedMember, ConversionFlags.None);
-
-		public override void Decompile(Language language, ITextOutput output, DecompilationOptions options)
-			=> language.WriteCommentLine(output, Signature);
-	}
+        public override void Decompile(Language language, ITextOutput output, DecompilationOptions options) => language.WriteCommentLine(output, Signature);
+    }
 }

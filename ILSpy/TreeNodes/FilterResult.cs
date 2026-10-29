@@ -15,34 +15,30 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 namespace ICSharpCode.ILSpy.TreeNodes
 {
-	/// <summary>
-	/// Outcome of an <see cref="ILSpyTreeNode.Filter"/> evaluation against the active
-	/// <see cref="LanguageSettings"/>. Drives whether the assembly tree shows the node, hides
-	/// it outright, or shows it only if any descendant matches.
-	/// </summary>
-	public enum FilterResult
-	{
-		/// <summary>Shows the node (and resets the search term for child nodes).</summary>
-		Match,
-
-		/// <summary>
-		/// Hides the node only if all children are hidden (and resets the search term for
-		/// child nodes). Treated identically to <see cref="Recurse"/> by the cascade — the
-		/// "reset search term" distinction is documented for forward-compat with the WPF
-		/// behavior contract.
-		/// </summary>
-		MatchAndRecurse,
-
-		/// <summary>
-		/// Hides the node only if all children are hidden (doesn't reset the search term
-		/// for child nodes).
-		/// </summary>
-		Recurse,
-
-		/// <summary>The node and all its descendants are hidden.</summary>
-		Hidden,
-	}
+    /// <summary>
+    /// Outcome of an <see cref="ILSpyTreeNode.Filter"/> evaluation against the active
+    /// <see cref="LanguageSettings"/>. Drives whether the assembly tree shows the node, hides
+    /// it outright, or shows it only if any descendant matches.
+    /// </summary>
+    public enum FilterResult
+    {
+        /// <summary>Shows the node (and resets the search term for child nodes).</summary>
+        Match,
+        /// <summary>
+        /// Hides the node only if all children are hidden (and resets the search term for
+        /// child nodes). Treated identically to <see cref="Recurse"/> by the cascade — the
+        /// "reset search term" distinction is documented for forward-compat with the WPF
+        /// behavior contract.
+        /// </summary>
+        MatchAndRecurse,
+        /// <summary>
+        /// Hides the node only if all children are hidden (doesn't reset the search term
+        /// for child nodes).
+        /// </summary>
+        Recurse,
+        /// <summary>The node and all its descendants are hidden.</summary>
+        Hidden,
+    }
 }

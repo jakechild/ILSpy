@@ -15,10 +15,8 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Globalization;
-
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
@@ -26,33 +24,29 @@ using Avalonia.Media.Immutable;
 
 namespace ICSharpCode.ILSpy.Themes
 {
-	/// <summary>
-	/// Maps a boolean to one of two configured <see cref="IBrush"/>es. The only remaining use is the
-	/// active-dock accent line under the document tab strip (Panel#PART_DocumentSeperator), which is
-	/// colored by the *active document's* IsPreview -- a dock-level fact that the per-tab
-	/// <c>previewTab</c> style class cannot express, so it stays a binding. Every other tab/pane
-	/// state is now driven by that style class with plain DynamicResource brushes instead.
-	/// </summary>
-	public sealed class BoolToBrushConverter : IValueConverter
-	{
-		/// <summary>The active-dock accent line's fill: PURPLE (#9B59B6) when the active document is
-		/// the One, BLUE (#007ACC) otherwise. These two values MUST stay in sync with the
-		/// ILSpy.PreviewTabActiveBackground and ILSpy.DockTabItemActiveBackground resources in
-		/// App.axaml -- both colors read on light and dark, so they are theme-agnostic here.</summary>
-		public static readonly BoolToBrushConverter PreviewOrActiveTabBackground = new() {
-			TrueBrush = new ImmutableSolidColorBrush(Color.FromRgb(0x9B, 0x59, 0xB6)),
-			FalseBrush = new ImmutableSolidColorBrush(Color.FromRgb(0x00, 0x7A, 0xCC)),
-		};
+    /// <summary>
+    /// Maps a boolean to one of two configured <see cref="IBrush"/>es. The only remaining use is the
+    /// active-dock accent line under the document tab strip (Panel#PART_DocumentSeperator), which is
+    /// colored by the *active document's* IsPreview -- a dock-level fact that the per-tab
+    /// <c>previewTab</c> style class cannot express, so it stays a binding. Every other tab/pane
+    /// state is now driven by that style class with plain DynamicResource brushes instead.
+    /// </summary>
+    public sealed class BoolToBrushConverter : IValueConverter
+    {
+        /// <summary>The active-dock accent line's fill: PURPLE (#9B59B6) when the active document is
+        /// the One, BLUE (#007ACC) otherwise. These two values MUST stay in sync with the
+        /// ILSpy.PreviewTabActiveBackground and ILSpy.DockTabItemActiveBackground resources in
+        /// App.axaml -- both colors read on light and dark, so they are theme-agnostic here.</summary>
+        public static readonly BoolToBrushConverter PreviewOrActiveTabBackground = new()
+        {
+            TrueBrush = new ImmutableSolidColorBrush(Color.FromRgb(0x9B, 0x59, 0xB6)),
+            FalseBrush = new ImmutableSolidColorBrush(Color.FromRgb(0x00, 0x7A, 0xCC)),
+        };
+        public IBrush? TrueBrush { get; init; }
+        /// <summary>Brush returned on the false branch (default <see langword="null"/>).</summary>
+        public IBrush? FalseBrush { get; init; }
 
-		public IBrush? TrueBrush { get; init; }
-
-		/// <summary>Brush returned on the false branch (default <see langword="null"/>).</summary>
-		public IBrush? FalseBrush { get; init; }
-
-		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-			=> value is bool b && b ? TrueBrush : FalseBrush;
-
-		public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-			=> BindingOperations.DoNothing;
-	}
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value is bool b && b ? TrueBrush : FalseBrush;
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => BindingOperations.DoNothing;
+    }
 }

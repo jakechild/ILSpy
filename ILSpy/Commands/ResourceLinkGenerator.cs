@@ -15,36 +15,68 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Text.RegularExpressions;
-
 using AvaloniaEdit.Rendering;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	/// <summary>
-	/// LinkElementGenerator that matches a single literal phrase and produces a
-	/// <see cref="VisualLineLinkText"/> pointing at a fixed <see cref="Uri"/>. Mirrors the
-	/// "MyLinkElementGenerator" pattern from the legacy WPF host.
-	/// </summary>
-	internal sealed class ResourceLinkGenerator : LinkElementGenerator
-	{
-		readonly Uri target;
+    /// <summary>
+    /// LinkElementGenerator that matches a single literal phrase and produces a
+    /// <see cref="VisualLineLinkText"/> pointing at a fixed <see cref="Uri"/>. Mirrors the
+    /// "MyLinkElementGenerator" pattern from the legacy WPF host.
+    /// </summary>
+    internal sealed class ResourceLinkGenerator : LinkElementGenerator
+    {
+        readonly Uri target;
+        public ResourceLinkGenerator(string phrase, Uri target) : base(new Regex(Regex.Escape(phrase)))
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "89b04e85-0dad-41d0-9db2-4f7812e67c54" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.target = target ?? throw new ArgumentNullException(nameof(target));
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "f3d593dd-58b1-4346-95cf-e56919462831" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            // AvaloniaEdit's TextEditorOptions.RequireControlModifierForHyperlinkClick only
+            // propagates to its *built-in* LinkElementGenerator (via the
+            // IBuiltinElementGenerator.FetchOptions hook the editor invokes from
+            // UpdateBuiltinElementGeneratorsFromOptions). User-added subclasses inherit
+            // whatever the parameterless base constructor set (default true), so we have to
+            // opt out explicitly here.
+            RequireControlModifierForClick = false;
+        }
 
-		public ResourceLinkGenerator(string phrase, Uri target)
-			: base(new Regex(Regex.Escape(phrase)))
-		{
-			this.target = target ?? throw new ArgumentNullException(nameof(target));
-			// AvaloniaEdit's TextEditorOptions.RequireControlModifierForHyperlinkClick only
-			// propagates to its *built-in* LinkElementGenerator (via the
-			// IBuiltinElementGenerator.FetchOptions hook the editor invokes from
-			// UpdateBuiltinElementGeneratorsFromOptions). User-added subclasses inherit
-			// whatever the parameterless base constructor set (default true), so we have to
-			// opt out explicitly here.
-			RequireControlModifierForClick = false;
-		}
-
-		protected override Uri GetUriFromMatch(Match match) => target;
-	}
+        protected override Uri GetUriFromMatch(Match match) => target;
+    }
 }

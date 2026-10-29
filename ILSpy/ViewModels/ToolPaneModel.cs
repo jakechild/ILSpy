@@ -15,41 +15,55 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using Avalonia.Controls;
-
 using Dock.Controls.DeferredContentControl;
 using Dock.Model.Core;
 using Dock.Model.Mvvm.Controls;
-
 using ICSharpCode.ILSpy.Docking;
 
 namespace ICSharpCode.ILSpy.ViewModels
 {
-	/// <summary>
-	/// Base for our docked tool panes (assembly tree, search results, analyzers, …). Opts
-	/// out of Dock.Avalonia's deferred-content presentation: by default Dock waits for the
-	/// layout to settle before instantiating each tool pane's view, which on startup costs
-	/// hundreds of milliseconds between the window painting and the panes appearing. The
-	/// trees + search results are cheap to materialise (lazy loading handles deeper levels)
-	/// so eager realisation is the right tradeoff — same as <c>ContentTabPage</c>.
-	///
-	/// The ctor also pre-populates <see cref="Tool.DockCapabilityOverrides"/> with a
-	/// default instance because the Dock theme template binds against
-	/// <c>ActiveDockable.DockCapabilityOverrides.CanPin</c> / <c>CanClose</c> (and similar)
-	/// the moment the pane chrome is realised. Without a non-null instance every pane
-	/// startup logs a <c>[Binding]</c> error per property — adds up to ~30 errors per
-	/// launch.
-	/// </summary>
-	public abstract class ToolPaneModel : Tool, IDeferredContentPresentation, IDockableViewOwner
-	{
-		protected ToolPaneModel()
-		{
-			DockCapabilityOverrides = new DockCapabilityOverrides();
-		}
+    /// <summary>
+    /// Base for our docked tool panes (assembly tree, search results, analyzers, …). Opts
+    /// out of Dock.Avalonia's deferred-content presentation: by default Dock waits for the
+    /// layout to settle before instantiating each tool pane's view, which on startup costs
+    /// hundreds of milliseconds between the window painting and the panes appearing. The
+    /// trees + search results are cheap to materialise (lazy loading handles deeper levels)
+    /// so eager realisation is the right tradeoff — same as <c>ContentTabPage</c>.
+    ///
+    /// The ctor also pre-populates <see cref="Tool.DockCapabilityOverrides"/> with a
+    /// default instance because the Dock theme template binds against
+    /// <c>ActiveDockable.DockCapabilityOverrides.CanPin</c> / <c>CanClose</c> (and similar)
+    /// the moment the pane chrome is realised. Without a non-null instance every pane
+    /// startup logs a <c>[Binding]</c> error per property — adds up to ~30 errors per
+    /// launch.
+    /// </summary>
+    public abstract class ToolPaneModel : Tool, IDeferredContentPresentation, IDockableViewOwner
+    {
+        protected ToolPaneModel()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "38f79ac7-7e04-4fe3-babd-9500276dfc1e" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            DockCapabilityOverrides = new DockCapabilityOverrides();
+        }
 
-		bool IDeferredContentPresentation.DeferContentPresentation => false;
-
-		public Control? OwnedView { get; set; }
-	}
+        bool IDeferredContentPresentation.DeferContentPresentation => false;
+        public Control? OwnedView { get; set; }
+    }
 }

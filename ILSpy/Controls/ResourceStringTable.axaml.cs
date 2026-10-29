@@ -15,27 +15,61 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
-
 using global::Avalonia.Controls;
 
 namespace ICSharpCode.ILSpy.Controls
 {
-	/// <summary>
-	/// Tabular view of the string entries inside a <c>.resources</c> file. Used as an inline
-	/// UI element from <see cref="TreeNodes.ResourcesFileTreeNode"/>'s decompilation output.
-	/// </summary>
-	public partial class ResourceStringTable : UserControl
-	{
-		public ResourceStringTable()
-		{
-			InitializeComponent();
-		}
+    /// <summary>
+    /// Tabular view of the string entries inside a <c>.resources</c> file. Used as an inline
+    /// UI element from <see cref="TreeNodes.ResourcesFileTreeNode"/>'s decompilation output.
+    /// </summary>
+    public partial class ResourceStringTable : UserControl
+    {
+        public ResourceStringTable()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "826fe747-4776-4dcd-b567-762c9463e175" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            InitializeComponent();
+        }
 
-		public ResourceStringTable(IEnumerable<KeyValuePair<string, string>> entries) : this()
-		{
-			EntriesGrid.ItemsSource = entries;
-		}
-	}
+        public ResourceStringTable(IEnumerable<KeyValuePair<string, string>> entries) : this()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "921e7357-3b1a-434d-a19c-348b83037cc5" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            EntriesGrid.ItemsSource = entries;
+        }
+    }
 }

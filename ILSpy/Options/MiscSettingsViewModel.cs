@@ -15,34 +15,66 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Xml.Linq;
-
 using CommunityToolkit.Mvvm.ComponentModel;
-
 using ICSharpCode.ILSpy.Properties;
 
 namespace ICSharpCode.ILSpy.Options
 {
-	/// <summary>Viewmodel for the Misc panel. WPF additionally exposes a shell-integration
-	/// command (Add/Remove "Open with ILSpy" registry keys); deferred for v1 since
-	/// Avalonia's WinExe doesn't register file associations yet.</summary>
-	[ExportOptionPage(Order = 30)]
-	public sealed partial class MiscSettingsViewModel : ObservableObject, IOptionPage
-	{
-		public string Title => Resources.Misc;
+    /// <summary>Viewmodel for the Misc panel. WPF additionally exposes a shell-integration
+    /// command (Add/Remove "Open with ILSpy" registry keys); deferred for v1 since
+    /// Avalonia's WinExe doesn't register file associations yet.</summary>
+    [ExportOptionPage(Order = 30)]
+    public sealed partial class MiscSettingsViewModel : ObservableObject, IOptionPage
+    {
+        public string Title => Resources.Misc;
 
-		[ObservableProperty]
-		MiscSettings settings = null!;
+        [ObservableProperty]
+        MiscSettings settings = null !;
+        public void Load(SettingsService service)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "836d45ce-078f-4dcb-942c-1cfae855137a" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Settings = service.MiscSettings;
+        }
 
-		public void Load(SettingsService service)
-		{
-			Settings = service.MiscSettings;
-		}
-
-		public void LoadDefaults()
-		{
-			Settings.LoadFromXml(new XElement("MiscSettings"));
-		}
-	}
+        public void LoadDefaults()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "56fb0244-beb2-4abe-a1dc-e45873ed0909" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Settings.LoadFromXml(new XElement("MiscSettings"));
+        }
+    }
 }

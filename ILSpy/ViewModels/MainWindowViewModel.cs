@@ -15,62 +15,191 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Composition;
-
 using Dock.Model.Controls;
-
 using ICSharpCode.ILSpy.AssemblyTree;
 using ICSharpCode.ILSpy.Docking;
 using ICSharpCode.ILSpy.Languages;
 
 namespace ICSharpCode.ILSpy.ViewModels
 {
-	[Export]
-	[Shared]
-	public partial class MainWindowViewModel : ViewModelBase
-	{
-		public AssemblyTreeModel AssemblyTreeModel { get; }
-
-		public LanguageService LanguageService { get; }
-
-		public DockWorkspace DockWorkspace { get; }
-
-		public LanguageSettings LanguageSettings { get; }
-
-		public UpdatePanelViewModel UpdatePanel { get; }
-
-		public IRootDock DockLayout => DockWorkspace.Layout;
-
-		public System.Collections.Generic.IReadOnlyList<ToolPaneMenuItem> ToolPaneMenuItems => DockWorkspace.ToolPaneMenuItems;
-
-		public string Title =>
+    [Export]
+    [Shared]
+    public partial class MainWindowViewModel : ViewModelBase
+    {
+        public AssemblyTreeModel AssemblyTreeModel { get; }
+        public LanguageService LanguageService { get; }
+        public DockWorkspace DockWorkspace { get; }
+        public LanguageSettings LanguageSettings { get; }
+        public UpdatePanelViewModel UpdatePanel { get; }
+        public IRootDock DockLayout => DockWorkspace.Layout;
+        public System.Collections.Generic.IReadOnlyList<ToolPaneMenuItem> ToolPaneMenuItems => DockWorkspace.ToolPaneMenuItems;
+        public string Title => 
 #if DEBUG
 			$"ILSpy {DecompilerVersionInfo.FullVersion}";
 #else
-			"ILSpy";
-#endif
+        "ILSpy";
 
-		[ImportingConstructor]
-		public MainWindowViewModel(
-			AssemblyTreeModel assemblyTreeModel,
-			LanguageService languageService,
-			DockWorkspace dockWorkspace,
-			SettingsService settingsService,
-			UpdatePanelViewModel updatePanel)
-		{
-			AppEnv.AppLog.Mark("MainWindowViewModel ctor entered (deps already resolved)");
-			AssemblyTreeModel = assemblyTreeModel;
-			LanguageService = languageService;
-			DockWorkspace = dockWorkspace;
-			LanguageSettings = settingsService.SessionSettings.LanguageSettings;
-			UpdatePanel = updatePanel;
-			// Auto-throttled background update check; respects user's
-			// AutomaticUpdateCheckEnabled preference + 7-day cooldown. Fire-and-forget so
-			// startup isn't blocked on the HTTP call. The panel stays hidden unless an
-			// actual update is available.
-			_ = updatePanel.CheckIfUpdatesAvailableAsync();
-			AppEnv.AppLog.Mark("MainWindowViewModel ctor exited");
-		}
-	}
+#endif
+        [ImportingConstructor]
+        public MainWindowViewModel(AssemblyTreeModel assemblyTreeModel, LanguageService languageService, DockWorkspace dockWorkspace, SettingsService settingsService, UpdatePanelViewModel updatePanel)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "34a0fe92-91c0-43b6-90e4-a2066f6096de" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            AppEnv.AppLog.Mark("MainWindowViewModel ctor entered (deps already resolved)");
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "b224efb9-df46-4952-9059-185383133bb2" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            AssemblyTreeModel = assemblyTreeModel;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "747d578d-1339-4ee1-a883-23e4fc04ba35" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            LanguageService = languageService;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "9b56cade-e912-4082-8832-a601a9dfbe2c" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            DockWorkspace = dockWorkspace;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "b86a2899-44ae-4c8d-b0b9-f7781aa74c55" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            LanguageSettings = settingsService.SessionSettings.LanguageSettings;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "8186f51a-8fa0-4e5b-9559-89b9f4460fa2" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            UpdatePanel = updatePanel;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "a667546e-808a-4963-b1e9-cfd0222f43e5" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            // Auto-throttled background update check; respects user's
+            // AutomaticUpdateCheckEnabled preference + 7-day cooldown. Fire-and-forget so
+            // startup isn't blocked on the HTTP call. The panel stays hidden unless an
+            // actual update is available.
+            _ = updatePanel.CheckIfUpdatesAvailableAsync();
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "16306d86-fc16-4aa8-b2fb-a9801d62693f" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            AppEnv.AppLog.Mark("MainWindowViewModel ctor exited");
+        }
+    }
 }

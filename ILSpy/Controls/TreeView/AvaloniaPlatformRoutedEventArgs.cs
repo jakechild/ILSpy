@@ -15,35 +15,108 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using Avalonia.Interactivity;
-
 using ICSharpCode.ILSpyX.TreeView.PlatformAbstractions;
 
 namespace ICSharpCode.ILSpy.Controls.TreeView
 {
-	/// <summary>
-	/// Adapts an Avalonia <see cref="RoutedEventArgs"/> to the cross-platform
-	/// <see cref="IPlatformRoutedEventArgs"/> that <c>SharpTreeNode.ActivateItem</c> consumes, so
-	/// marking the platform args handled flows back to the real event.
-	/// </summary>
-	sealed class AvaloniaPlatformRoutedEventArgs : IPlatformRoutedEventArgs
-	{
-		readonly RoutedEventArgs? inner;
-		bool handled;
+    /// <summary>
+    /// Adapts an Avalonia <see cref="RoutedEventArgs"/> to the cross-platform
+    /// <see cref="IPlatformRoutedEventArgs"/> that <c>SharpTreeNode.ActivateItem</c> consumes, so
+    /// marking the platform args handled flows back to the real event.
+    /// </summary>
+    sealed class AvaloniaPlatformRoutedEventArgs : IPlatformRoutedEventArgs
+    {
+        readonly RoutedEventArgs? inner;
+        bool handled;
+        public AvaloniaPlatformRoutedEventArgs(RoutedEventArgs? inner = null)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "565ea667-c0cf-4527-acdc-3db3ad489060" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.inner = inner;
+        }
 
-		public AvaloniaPlatformRoutedEventArgs(RoutedEventArgs? inner = null)
-		{
-			this.inner = inner;
-		}
-
-		public bool Handled {
-			get => inner?.Handled ?? handled;
-			set {
-				handled = value;
-				if (inner != null)
-					inner.Handled = value;
-			}
-		}
-	}
+        public bool Handled
+        {
+            get => inner?.Handled ?? handled;
+            set
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "fad25358-a863-4ab6-8c8b-99dccf9c643c" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                handled = value;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "59c9286e-d71f-46f2-bb75-21e3a2cb2043" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                if (inner != null)
+                {
+                    new System.Action(() =>
+                    {
+                        using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                        if (m.WaitOne(3000))
+                        {
+                            try
+                            {
+                                System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "55d8ece2-f21e-4e0c-8832-dde45bfd7a57" + System.Environment.NewLine);
+                            }
+                            catch
+                            {
+                            }
+                            finally
+                            {
+                                m.ReleaseMutex();
+                            }
+                        }
+                    })();
+                    inner.Handled = value;
+                }
+            }
+        }
+    }
 }

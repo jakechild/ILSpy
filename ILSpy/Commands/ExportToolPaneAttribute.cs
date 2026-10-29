@@ -15,55 +15,52 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Composition;
-
 using ICSharpCode.ILSpy.ViewModels;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	/// <summary>
-	/// Identifies which dock zone a tool pane belongs to. The dock factory groups exported
-	/// panes by alignment when building the default layout.
-	/// </summary>
-	public enum ToolPaneAlignment
-	{
-		Left,
-		Top,
-		Right,
-		Bottom,
-	}
+    /// <summary>
+    /// Identifies which dock zone a tool pane belongs to. The dock factory groups exported
+    /// panes by alignment when building the default layout.
+    /// </summary>
+    public enum ToolPaneAlignment
+    {
+        Left,
+        Top,
+        Right,
+        Bottom,
+    }
 
-	/// <summary>
-	/// Metadata view consumed by <see cref="ToolPaneRegistry"/>. System.Composition needs a
-	/// concrete metadata class with public settable properties matching the attribute's.
-	/// </summary>
-	public class ToolPaneMetadata
-	{
-		public string? ContentId { get; set; }
-		public ToolPaneAlignment Alignment { get; set; } = ToolPaneAlignment.Left;
-		public double Order { get; set; }
-		public bool IsVisibleByDefault { get; set; } = true;
-	}
+    /// <summary>
+    /// Metadata view consumed by <see cref="ToolPaneRegistry"/>. System.Composition needs a
+    /// concrete metadata class with public settable properties matching the attribute's.
+    /// </summary>
+    public class ToolPaneMetadata
+    {
+        public string? ContentId { get; set; }
+        public ToolPaneAlignment Alignment { get; set; } = ToolPaneAlignment.Left;
+        public double Order { get; set; }
+        public bool IsVisibleByDefault { get; set; } = true;
+    }
 
-	/// <summary>
-	/// Marks a <see cref="ToolPaneModel"/>-derived class as a discoverable tool pane. The
-	/// dock factory iterates all such exports to build the default layout, so plugins can
-	/// drop additional panes in without modifying core wiring.
-	/// </summary>
-	[MetadataAttribute]
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public class ExportToolPaneAttribute : ExportAttribute
-	{
-		public ExportToolPaneAttribute()
-			: base("ToolPane", typeof(ToolPaneModel))
-		{
-		}
+    /// <summary>
+    /// Marks a <see cref="ToolPaneModel"/>-derived class as a discoverable tool pane. The
+    /// dock factory iterates all such exports to build the default layout, so plugins can
+    /// drop additional panes in without modifying core wiring.
+    /// </summary>
+    [MetadataAttribute]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class ExportToolPaneAttribute : ExportAttribute
+    {
+        public ExportToolPaneAttribute() : base("ToolPane", typeof(ToolPaneModel))
+        {
+        }
 
-		public string? ContentId { get; set; }
-		public ToolPaneAlignment Alignment { get; set; } = ToolPaneAlignment.Left;
-		public double Order { get; set; }
-		public bool IsVisibleByDefault { get; set; } = true;
-	}
+        public string? ContentId { get; set; }
+        public ToolPaneAlignment Alignment { get; set; } = ToolPaneAlignment.Left;
+        public double Order { get; set; }
+        public bool IsVisibleByDefault { get; set; } = true;
+    }
 }

@@ -15,24 +15,22 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 namespace ICSharpCode.ILSpy.Options
 {
-	/// <summary>
-	/// Plugin contract for individual panels in the Options tab. Each implementation is
-	/// MEF-discovered via <see cref="ExportOptionPageAttribute"/>; the host calls
-	/// <see cref="Load"/> with the live settings service when the tab opens, and
-	/// <see cref="LoadDefaults"/> when the user clicks the per-panel reset button. Panels
-	/// bind directly to the live section instances — every toggle is immediately visible
-	/// to other consumers (the decompiler view, the tree, etc.). XML persistence rides on
-	/// <see cref="ICSharpCode.ILSpy.SettingsService.Save"/> at app exit.
-	/// </summary>
-	public interface IOptionPage
-	{
-		string Title { get; }
+    /// <summary>
+    /// Plugin contract for individual panels in the Options tab. Each implementation is
+    /// MEF-discovered via <see cref="ExportOptionPageAttribute"/>; the host calls
+    /// <see cref="Load"/> with the live settings service when the tab opens, and
+    /// <see cref="LoadDefaults"/> when the user clicks the per-panel reset button. Panels
+    /// bind directly to the live section instances — every toggle is immediately visible
+    /// to other consumers (the decompiler view, the tree, etc.). XML persistence rides on
+    /// <see cref="ICSharpCode.ILSpy.SettingsService.Save"/> at app exit.
+    /// </summary>
+    public interface IOptionPage
+    {
+        string Title { get; }
 
-		void Load(SettingsService settings);
-
-		void LoadDefaults();
-	}
+        void Load(SettingsService settings);
+        void LoadDefaults();
+    }
 }

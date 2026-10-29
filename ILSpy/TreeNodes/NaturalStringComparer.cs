@@ -15,18 +15,16 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Globalization;
 
 namespace ICSharpCode.ILSpy.TreeNodes
 {
-	/// <summary>
-	/// .NET natural string comparison.
-	/// </summary>
-	public static class NaturalStringComparer
-	{
-		public static readonly IComparer<string> Instance =
-			System.StringComparer.Create(CultureInfo.CurrentCulture, CompareOptions.NumericOrdering);
-	}
+    /// <summary>
+    /// .NET natural string comparison.
+    /// </summary>
+    public static class NaturalStringComparer
+    {
+        public static readonly IComparer<string> Instance = System.StringComparer.Create(CultureInfo.CurrentCulture, CompareOptions.NumericOrdering);
+    }
 }

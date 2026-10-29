@@ -15,43 +15,68 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Composition;
-
 using ICSharpCode.ILSpy.Properties;
-
 using ICSharpCode.ILSpy.Docking;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	/// <summary>
-	/// Toolbar-surface adapter for the existing <see cref="DockWorkspace.ShowSearchCommand"/>.
-	/// Wraps it so the [ExportToolbarCommand] discovery picks up a single ICommand entry; both
-	/// the magnifier toolbar button and the Ctrl+Shift+F / Ctrl+E key bindings end up routed
-	/// through the same workspace command.
-	/// </summary>
-	[ExportToolbarCommand(
-		ToolTip = nameof(Resources.SearchCtrlShiftFOrCtrlE),
-		ToolbarIcon = "Images/Search",
-		ToolbarCategory = nameof(Resources.View),
-		ToolbarOrder = 100)]
-	[Shared]
-	sealed class ShowSearchToolbarCommand : SimpleCommand
-	{
-		readonly DockWorkspace dockWorkspace;
+    /// <summary>
+    /// Toolbar-surface adapter for the existing <see cref="DockWorkspace.ShowSearchCommand"/>.
+    /// Wraps it so the [ExportToolbarCommand] discovery picks up a single ICommand entry; both
+    /// the magnifier toolbar button and the Ctrl+Shift+F / Ctrl+E key bindings end up routed
+    /// through the same workspace command.
+    /// </summary>
+    [ExportToolbarCommand(ToolTip = nameof(Resources.SearchCtrlShiftFOrCtrlE), ToolbarIcon = "Images/Search", ToolbarCategory = nameof(Resources.View), ToolbarOrder = 100)]
+    [Shared]
+    sealed class ShowSearchToolbarCommand : SimpleCommand
+    {
+        readonly DockWorkspace dockWorkspace;
+        [ImportingConstructor]
+        public ShowSearchToolbarCommand(DockWorkspace dockWorkspace)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "77540cd4-63c1-473d-aacf-9930dacbec09" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.dockWorkspace = dockWorkspace;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "e64ac723-7779-4755-afe0-76e12ab0c11b" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            dockWorkspace.ShowSearchCommand.CanExecuteChanged += (_, _) => RaiseCanExecuteChanged();
+        }
 
-		[ImportingConstructor]
-		public ShowSearchToolbarCommand(DockWorkspace dockWorkspace)
-		{
-			this.dockWorkspace = dockWorkspace;
-			dockWorkspace.ShowSearchCommand.CanExecuteChanged += (_, _) => RaiseCanExecuteChanged();
-		}
-
-		public override bool CanExecute(object? parameter)
-			=> dockWorkspace.ShowSearchCommand.CanExecute(parameter);
-
-		public override void Execute(object? parameter)
-			=> dockWorkspace.ShowSearchCommand.Execute(parameter);
-	}
+        public override bool CanExecute(object? parameter) => dockWorkspace.ShowSearchCommand.CanExecute(parameter);
+        public override void Execute(object? parameter) => dockWorkspace.ShowSearchCommand.Execute(parameter);
+    }
 }

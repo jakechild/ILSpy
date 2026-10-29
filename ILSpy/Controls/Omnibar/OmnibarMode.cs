@@ -15,18 +15,17 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 namespace ICSharpCode.ILSpy.Controls.Omnibar
 {
-	/// <summary>
-	/// The two faces of the omnibar. <see cref="Breadcrumb"/> shows the path of the decompiled
-	/// node and is the resting state; <see cref="Search"/> turns the bar into a query input with
-	/// an inline suggestions dropdown. Typing switches into <see cref="Search"/>; Escape (or
-	/// navigating to a result) returns to <see cref="Breadcrumb"/>.
-	/// </summary>
-	public enum OmnibarMode
-	{
-		Breadcrumb,
-		Search,
-	}
+    /// <summary>
+    /// The two faces of the omnibar. <see cref="Breadcrumb"/> shows the path of the decompiled
+    /// node and is the resting state; <see cref="Search"/> turns the bar into a query input with
+    /// an inline suggestions dropdown. Typing switches into <see cref="Search"/>; Escape (or
+    /// navigating to a result) returns to <see cref="Breadcrumb"/>.
+    /// </summary>
+    public enum OmnibarMode
+    {
+        Breadcrumb,
+        Search,
+    }
 }

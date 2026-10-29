@@ -15,30 +15,43 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Composition;
-
 using ICSharpCode.ILSpy.Properties;
-
 using ICSharpCode.ILSpy.ViewModels;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	[ExportMainMenuCommand(ParentMenuID = nameof(Resources._Help), Header = nameof(Resources._CheckUpdates), MenuCategory = "Help", MenuOrder = 0)]
-	[Shared]
-	sealed class CheckForUpdatesCommand : SimpleCommand
-	{
-		readonly UpdatePanelViewModel updatePanel;
+    [ExportMainMenuCommand(ParentMenuID = nameof(Resources._Help), Header = nameof(Resources._CheckUpdates), MenuCategory = "Help", MenuOrder = 0)]
+    [Shared]
+    sealed class CheckForUpdatesCommand : SimpleCommand
+    {
+        readonly UpdatePanelViewModel updatePanel;
+        [ImportingConstructor]
+        public CheckForUpdatesCommand(UpdatePanelViewModel updatePanel)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "23418c25-425b-446b-a27b-7c08b37bb31b" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.updatePanel = updatePanel;
+        }
 
-		[ImportingConstructor]
-		public CheckForUpdatesCommand(UpdatePanelViewModel updatePanel)
-		{
-			this.updatePanel = updatePanel;
-		}
-
-		// Force-checks regardless of the 7-day throttle and surfaces the result in the panel,
-		// including an explicit "up to date" banner when no newer version is found.
-		public override void Execute(object? parameter)
-			=> updatePanel.CheckIfUpdatesAvailableAsync(notifyOnUpToDate: true).HandleExceptions();
-	}
+        // Force-checks regardless of the 7-day throttle and surfaces the result in the panel,
+        // including an explicit "up to date" banner when no newer version is found.
+        public override void Execute(object? parameter) => updatePanel.CheckIfUpdatesAvailableAsync(notifyOnUpToDate: true).HandleExceptions();
+    }
 }

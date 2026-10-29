@@ -15,40 +15,51 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Composition;
-
 using ICSharpCode.ILSpy.Properties;
-
 using ICSharpCode.ILSpy.Docking;
 using ICSharpCode.ILSpy.Options;
 using ICSharpCode.ILSpy.ViewModels;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	/// <summary>
-	/// Opens (or focuses, if already open) the Options document tab. Mounted under the View
-	/// menu mirroring the WPF host's `ShowOptionsCommand`. Ensures a single open instance —
-	/// re-invocation just reactivates the existing tab.
-	/// </summary>
-	[ExportMainMenuCommand(ParentMenuID = nameof(Resources._View), Header = nameof(Resources._Options), MenuCategory = nameof(Resources.Options), MenuOrder = 999)]
-	[Shared]
-	[method: ImportingConstructor]
-	internal sealed class ShowOptionsCommand(
-		DockWorkspace dockWorkspace,
-		SettingsService settingsService,
-		// "OptionPages" is the named MEF contract every ExportOptionPageAttribute publishes
-		// under (see ExportOptionPageAttribute ctor). [ImportMany] alone resolves to the
-		// default contract for IOptionPage and would come up empty.
-		[ImportMany("OptionPages")] IEnumerable<ExportFactory<IOptionPage, IOptionsMetadata>> optionPages) : SimpleCommand
-	{
-		public override void Execute(object? parameter)
-		{
-			// Singleton: one retained Options tab for the session. Reopening after close reuses
-			// the same ContentTabPage (and its OptionsPageModel, so the selected page survives).
-			dockWorkspace.OpenSingletonTab("options",
-				() => dockWorkspace.OpenNewTab(new OptionsPageModel(settingsService, optionPages)));
-		}
-	}
+    /// <summary>
+    /// Opens (or focuses, if already open) the Options document tab. Mounted under the View
+    /// menu mirroring the WPF host's `ShowOptionsCommand`. Ensures a single open instance —
+    /// re-invocation just reactivates the existing tab.
+    /// </summary>
+    [ExportMainMenuCommand(ParentMenuID = nameof(Resources._View), Header = nameof(Resources._Options), MenuCategory = nameof(Resources.Options), MenuOrder = 999)]
+    [Shared]
+    [method: ImportingConstructor]
+    internal sealed class ShowOptionsCommand(DockWorkspace dockWorkspace, SettingsService settingsService, // "OptionPages" is the named MEF contract every ExportOptionPageAttribute publishes
+    // under (see ExportOptionPageAttribute ctor). [ImportMany] alone resolves to the
+    // default contract for IOptionPage and would come up empty.
+    [ImportMany("OptionPages")] IEnumerable<ExportFactory<IOptionPage, IOptionsMetadata>> optionPages) : SimpleCommand
+    {
+        public override void Execute(object? parameter)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "42f3be6b-88c3-4112-a74b-ed86d6c649ca" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            // Singleton: one retained Options tab for the session. Reopening after close reuses
+            // the same ContentTabPage (and its OptionsPageModel, so the selected page survives).
+            dockWorkspace.OpenSingletonTab("options", () => dockWorkspace.OpenNewTab(new OptionsPageModel(settingsService, optionPages)));
+        }
+    }
 }

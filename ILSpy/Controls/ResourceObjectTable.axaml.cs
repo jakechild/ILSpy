@@ -15,43 +15,131 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
-
 using global::Avalonia.Controls;
 
 namespace ICSharpCode.ILSpy.Controls
 {
-	/// <summary>
-	/// Tabular view of non-string entries inside a <c>.resources</c> file (ints, doubles,
-	/// serialized objects, …). Used as an inline UI element from
-	/// <see cref="TreeNodes.ResourcesFileTreeNode"/>'s decompilation output.
-	/// </summary>
-	public partial class ResourceObjectTable : UserControl
-	{
-		public ResourceObjectTable()
-		{
-			InitializeComponent();
-		}
+    /// <summary>
+    /// Tabular view of non-string entries inside a <c>.resources</c> file (ints, doubles,
+    /// serialized objects, …). Used as an inline UI element from
+    /// <see cref="TreeNodes.ResourcesFileTreeNode"/>'s decompilation output.
+    /// </summary>
+    public partial class ResourceObjectTable : UserControl
+    {
+        public ResourceObjectTable()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "33d36fa1-fd48-49a6-abfa-5824542dc591" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            InitializeComponent();
+        }
 
-		public ResourceObjectTable(IEnumerable<SerializedObjectRepresentation> entries) : this()
-		{
-			EntriesGrid.ItemsSource = entries;
-		}
-	}
+        public ResourceObjectTable(IEnumerable<SerializedObjectRepresentation> entries) : this()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "1a92326c-1e83-4b26-97b3-04293713f1b9" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            EntriesGrid.ItemsSource = entries;
+        }
+    }
 
-	/// <summary>Row model for <see cref="ResourceObjectTable"/>.</summary>
-	public sealed class SerializedObjectRepresentation
-	{
-		public SerializedObjectRepresentation(string key, string type, string value)
-		{
-			Key = key;
-			Type = type;
-			Value = value;
-		}
+    /// <summary>Row model for <see cref="ResourceObjectTable"/>.</summary>
+    public sealed class SerializedObjectRepresentation
+    {
+        public SerializedObjectRepresentation(string key, string type, string value)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "7afcb228-0ad2-4cb5-8af8-5c370b43e24d" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Key = key;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "c345c5fe-2faf-488a-82f3-8b2c46831b41" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Type = type;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "f6aa9a99-afa0-43b7-b257-f2bb46147079" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Value = value;
+        }
 
-		public string Key { get; }
-		public string Type { get; }
-		public string Value { get; }
-	}
+        public string Key { get; }
+        public string Type { get; }
+        public string Value { get; }
+    }
 }

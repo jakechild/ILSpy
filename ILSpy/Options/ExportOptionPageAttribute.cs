@@ -15,25 +15,24 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Composition;
 
 namespace ICSharpCode.ILSpy.Options
 {
-	/// <summary>
-	/// Marks a class as an Options-tab panel. MEF discovers all such exports under the
-	/// shared contract "OptionPages" with metadata <see cref="IOptionsMetadata"/>; the
-	/// Options host orders them by <see cref="Order"/> and renders them as inner tabs.
-	/// </summary>
-	[MetadataAttribute]
-	[AttributeUsage(AttributeTargets.Class)]
-	public sealed class ExportOptionPageAttribute() : ExportAttribute("OptionPages", typeof(IOptionPage))
-	{
-		// Public property is reflected by System.Composition into the IOptionsMetadata
-		// metadata view (matched by name). The metadata view is a concrete class in this
-		// MEF host, so there's no "implements IOptionsMetadata" — the wire-up is purely
-		// nominal property matching.
-		public int Order { get; set; }
-	}
+    /// <summary>
+    /// Marks a class as an Options-tab panel. MEF discovers all such exports under the
+    /// shared contract "OptionPages" with metadata <see cref="IOptionsMetadata"/>; the
+    /// Options host orders them by <see cref="Order"/> and renders them as inner tabs.
+    /// </summary>
+    [MetadataAttribute]
+    [AttributeUsage(AttributeTargets.Class)]
+    public sealed class ExportOptionPageAttribute() : ExportAttribute("OptionPages", typeof(IOptionPage))
+    {
+        // Public property is reflected by System.Composition into the IOptionsMetadata
+        // metadata view (matched by name). The metadata view is a concrete class in this
+        // MEF host, so there's no "implements IOptionsMetadata" — the wire-up is purely
+        // nominal property matching.
+        public int Order { get; set; }
+    }
 }

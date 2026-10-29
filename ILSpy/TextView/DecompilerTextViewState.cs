@@ -15,24 +15,19 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 namespace ICSharpCode.ILSpy.TextView
 {
-	/// <summary>
-	/// Snapshot of the decompiler editor's view state at a moment in time: caret offset, scroll
-	/// offsets, and the set of expanded foldings. Pulled from the live editor when a navigation
-	/// record is written, and applied back when Back/Forward re-decompiles the node.
-	///
-	/// <para>
-	/// This replaces the per-axis LastKnown*/Pending* fields that used to be pushed onto the
-	/// view-model on every caret/scroll event. That push mistook AvaloniaEdit's programmatic
-	/// caret-to-end (performed when the document text is replaced) for a user move and recorded
-	/// it, poisoning the captured position. Reading on demand at capture time avoids that.
-	/// </para>
-	/// </summary>
-	public readonly record struct DecompilerTextViewState(
-		int CaretOffset,
-		double VerticalOffset,
-		double HorizontalOffset,
-		FoldingsViewState.Snapshot? Foldings);
+    /// <summary>
+    /// Snapshot of the decompiler editor's view state at a moment in time: caret offset, scroll
+    /// offsets, and the set of expanded foldings. Pulled from the live editor when a navigation
+    /// record is written, and applied back when Back/Forward re-decompiles the node.
+    ///
+    /// <para>
+    /// This replaces the per-axis LastKnown*/Pending* fields that used to be pushed onto the
+    /// view-model on every caret/scroll event. That push mistook AvaloniaEdit's programmatic
+    /// caret-to-end (performed when the document text is replaced) for a user move and recorded
+    /// it, poisoning the captured position. Reading on demand at capture time avoids that.
+    /// </para>
+    /// </summary>
+    public readonly record struct DecompilerTextViewState(int CaretOffset, double VerticalOffset, double HorizontalOffset, FoldingsViewState.Snapshot? Foldings);
 }

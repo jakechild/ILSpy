@@ -15,62 +15,48 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Globalization;
-
 using Avalonia;
 using Avalonia.Data.Converters;
 
 namespace ICSharpCode.ILSpy.Controls.Omnibar
 {
-	/// <summary>
-	/// Adapters that let a plain horizontal <c>ScrollBar</c> drive and reflect a
-	/// <c>ScrollViewer</c>'s scroll state, which Avalonia exposes only as <c>Vector</c>/<c>Size</c>
-	/// (<c>Offset</c>, <c>ScrollBarMaximum</c>, <c>Viewport</c>) rather than the scalar
-	/// value/maximum/viewport a <c>ScrollBar</c> binds to. Used by the omnibar's overlay scrollbar
-	/// so the breadcrumb can scroll horizontally without the Simple theme's reserved scrollbar row.
-	/// </summary>
-	public static class OmnibarScrollConverters
-	{
-		/// <summary>
-		/// Two-way bridge between a <c>ScrollBar.Value</c> (double) and a <c>ScrollViewer.Offset</c>
-		/// (<see cref="Vector"/>): forward yields <c>Offset.X</c>; back rebuilds <c>(value, 0)</c>.
-		/// The omnibar disables vertical scrolling, so the Y component is always 0.
-		/// </summary>
-		public static readonly IValueConverter VectorX = new VectorXConverter();
+    /// <summary>
+    /// Adapters that let a plain horizontal <c>ScrollBar</c> drive and reflect a
+    /// <c>ScrollViewer</c>'s scroll state, which Avalonia exposes only as <c>Vector</c>/<c>Size</c>
+    /// (<c>Offset</c>, <c>ScrollBarMaximum</c>, <c>Viewport</c>) rather than the scalar
+    /// value/maximum/viewport a <c>ScrollBar</c> binds to. Used by the omnibar's overlay scrollbar
+    /// so the breadcrumb can scroll horizontally without the Simple theme's reserved scrollbar row.
+    /// </summary>
+    public static class OmnibarScrollConverters
+    {
+        /// <summary>
+        /// Two-way bridge between a <c>ScrollBar.Value</c> (double) and a <c>ScrollViewer.Offset</c>
+        /// (<see cref="Vector"/>): forward yields <c>Offset.X</c>; back rebuilds <c>(value, 0)</c>.
+        /// The omnibar disables vertical scrolling, so the Y component is always 0.
+        /// </summary>
+        public static readonly IValueConverter VectorX = new VectorXConverter();
+        /// <summary>Width of a <see cref="Size"/> (e.g. a <c>ScrollViewer.Viewport</c>).</summary>
+        public static readonly IValueConverter SizeWidth = new SizeWidthConverter();
+        /// <summary>True when a <see cref="Vector"/>'s X is greater than 0 (i.e. content overflows).</summary>
+        public static readonly IValueConverter VectorXPositive = new VectorXPositiveConverter();
+        sealed class VectorXConverter : IValueConverter
+        {
+            public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value is Vector v ? v.X : 0d;
+            public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => new Vector(value is double d ? d : 0d, 0d);
+        }
 
-		/// <summary>Width of a <see cref="Size"/> (e.g. a <c>ScrollViewer.Viewport</c>).</summary>
-		public static readonly IValueConverter SizeWidth = new SizeWidthConverter();
+        sealed class SizeWidthConverter : IValueConverter
+        {
+            public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value is Size s ? s.Width : 0d;
+            public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
+        }
 
-		/// <summary>True when a <see cref="Vector"/>'s X is greater than 0 (i.e. content overflows).</summary>
-		public static readonly IValueConverter VectorXPositive = new VectorXPositiveConverter();
-
-		sealed class VectorXConverter : IValueConverter
-		{
-			public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-				=> value is Vector v ? v.X : 0d;
-
-			public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-				=> new Vector(value is double d ? d : 0d, 0d);
-		}
-
-		sealed class SizeWidthConverter : IValueConverter
-		{
-			public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-				=> value is Size s ? s.Width : 0d;
-
-			public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-				=> throw new NotSupportedException();
-		}
-
-		sealed class VectorXPositiveConverter : IValueConverter
-		{
-			public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-				=> value is Vector v && v.X > 0;
-
-			public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-				=> throw new NotSupportedException();
-		}
-	}
+        sealed class VectorXPositiveConverter : IValueConverter
+        {
+            public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value is Vector v && v.X > 0;
+            public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
+        }
+    }
 }

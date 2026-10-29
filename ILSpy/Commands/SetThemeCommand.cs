@@ -15,20 +15,57 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Composition;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	[Export]
-	[Shared]
-	[method: ImportingConstructor]
-	public class SetThemeCommand(SettingsService settingsService) : SimpleCommand
-	{
-		public override void Execute(object? parameter)
-		{
-			if (parameter is string theme)
-				settingsService.SessionSettings.Theme = theme;
-		}
-	}
+    [Export]
+    [Shared]
+    [method: ImportingConstructor]
+    public class SetThemeCommand(SettingsService settingsService) : SimpleCommand
+    {
+        public override void Execute(object? parameter)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "4c0cf72b-cbc3-4683-8363-f6a289cd8df0" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            if (parameter is string theme)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "2d8ff52f-ac23-49dd-bb05-e4fddf2b6dfe" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                settingsService.SessionSettings.Theme = theme;
+            }
+        }
+    }
 }

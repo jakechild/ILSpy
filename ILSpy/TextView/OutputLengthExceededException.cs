@@ -15,17 +15,16 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 
 namespace ICSharpCode.ILSpy.TextView
 {
-	/// <summary>
-	/// Thrown by <see cref="AvaloniaEditTextOutput"/> once its accumulated text exceeds
-	/// <see cref="AvaloniaEditTextOutput.LengthLimit"/>, so a runaway decompile (a huge type or
-	/// namespace) is stopped before it can hang or exhaust memory on the UI thread.
-	/// </summary>
-	public sealed class OutputLengthExceededException : Exception
-	{
-	}
+    /// <summary>
+    /// Thrown by <see cref="AvaloniaEditTextOutput"/> once its accumulated text exceeds
+    /// <see cref="AvaloniaEditTextOutput.LengthLimit"/>, so a runaway decompile (a huge type or
+    /// namespace) is stopped before it can hang or exhaust memory on the UI thread.
+    /// </summary>
+    public sealed class OutputLengthExceededException : Exception
+    {
+    }
 }

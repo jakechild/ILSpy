@@ -15,109 +15,197 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Globalization;
-
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ICSharpCode.ILSpy.Bookmarks
 {
-	/// <summary>
-	/// How a <see cref="Bookmark"/> is anchored to a decompiled member. Prefer semantic anchors
-	/// (metadata token or method IL offset) and use the rendered line only when no stable semantic
-	/// anchor exists for the clicked line.
-	/// </summary>
-	public enum BookmarkKind
-	{
-		/// <summary>A definition line (type, method, field, property, event): module + token.</summary>
-		Token,
+    /// <summary>
+    /// How a <see cref="Bookmark"/> is anchored to a decompiled member. Prefer semantic anchors
+    /// (metadata token or method IL offset) and use the rendered line only when no stable semantic
+    /// anchor exists for the clicked line.
+    /// </summary>
+    public enum BookmarkKind
+    {
+        /// <summary>A definition line (type, method, field, property, event): module + token.</summary>
+        Token,
+        /// <summary>A line inside a method body: module + method token + IL offset.</summary>
+        Body,
+        /// <summary>A displayed line without a stable semantic anchor: module + containing token + visible line number.</summary>
+        Line
+    }
 
-		/// <summary>A line inside a method body: module + method token + IL offset.</summary>
-		Body,
+    /// <summary>
+    /// A single user bookmark in the flat bookmark list. The anchor fields are immutable
+    /// (set when the bookmark is created); only <see cref="Name"/> and <see cref="Enabled"/>
+    /// change at runtime, both bound two-way in the bookmarks pane.
+    /// </summary>
+    public sealed partial class Bookmark : ObservableObject
+    {
+        int lineNumber;
+        [ObservableProperty]
+        private string name = "";
+        [ObservableProperty]
+        private bool enabled = true;
+        /// <summary>Path of the assembly file, used to reload it from disk on navigation.</summary>
+        public required string FileName { get; init; }
+        /// <summary>Assembly identity (also part of the duplicate/merge key).</summary>
+        public required string AssemblyFullName { get; init; }
+        /// <summary>Module file name, shown in the pane's "Module" column.</summary>
+        public required string ModuleName { get; init; }
+        /// <summary>Metadata token of the member (or, for <see cref="BookmarkKind.Body"/>, the enclosing method).</summary>
+        public required uint Token { get; init; }
+        public required BookmarkKind Kind { get; init; }
+        /// <summary>IL offset within the method body; meaningful only for <see cref="BookmarkKind.Body"/>.</summary>
+        public int ILOffset { get; init; }
+        /// <summary>Visible document line number captured in the rendered text.</summary>
+        public int LineNumber { get => lineNumber; init => lineNumber = value; }
+        /// <summary>
+        /// Display name of the anchored member. Navigation
+        /// resolves purely by token and does not compare this name: a token can legitimately point at
+        /// a compiler-generated member (e.g. a local function) whose resolved name differs from this
+        /// stored display name, and a name check would wrongly reject that valid navigation.
+        /// </summary>
+        public required string MemberName { get; init; }
+        /// <summary>Full display name of the tree node whose rendered text contains the bookmark.</summary>
+        public string? LocationNodeName { get; init; }
+        /// <summary>Decompiler editor view state captured when the bookmark was created.</summary>
+        public BookmarkViewState? ViewState { get; set; }
 
-		/// <summary>A displayed line without a stable semantic anchor: module + containing token + visible line number.</summary>
-		Line
-	}
+        /// <summary>Location text shown in the bookmarks pane.</summary>
+        public string DisplayLocation
+        {
+            get
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "d191160c-2b6c-4840-b79e-b8efc477399e" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                var nodeName = !string.IsNullOrEmpty(LocationNodeName) ? LocationNodeName : ViewState?.SelectedTreeNodePath is { Count: > 0 } path ? path[^1] : MemberName;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "bae1fe9a-a556-49ee-8c37-8bd423251814" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                return LineNumber > 0 ? string.Create(CultureInfo.InvariantCulture, $"{nodeName}:{LineNumber}") : nodeName;
+            }
+        }
 
-	/// <summary>
-	/// A single user bookmark in the flat bookmark list. The anchor fields are immutable
-	/// (set when the bookmark is created); only <see cref="Name"/> and <see cref="Enabled"/>
-	/// change at runtime, both bound two-way in the bookmarks pane.
-	/// </summary>
-	public sealed partial class Bookmark : ObservableObject
-	{
-		int lineNumber;
+        /// <summary>Updates the rendered line shown in the bookmarks pane after the current document resolves it.</summary>
+        public void UpdateRenderedLineNumber(int lineNumber)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "436214a6-e8f2-4a37-b6e3-81450bb0a62c" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            if (lineNumber < 1 || this.lineNumber == lineNumber)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "f84ff98c-e9ce-411f-9f94-9caa9426b1ef" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                return;
+            }
 
-		[ObservableProperty]
-		private string name = "";
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "831dc76b-838d-4c6a-b8f5-47d5310c83fb" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.lineNumber = lineNumber;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "26131839-bb7d-418d-9ac6-bb82a5a51253" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            OnPropertyChanged(nameof(DisplayLocation));
+        }
 
-		[ObservableProperty]
-		private bool enabled = true;
-
-		/// <summary>Path of the assembly file, used to reload it from disk on navigation.</summary>
-		public required string FileName { get; init; }
-
-		/// <summary>Assembly identity (also part of the duplicate/merge key).</summary>
-		public required string AssemblyFullName { get; init; }
-
-		/// <summary>Module file name, shown in the pane's "Module" column.</summary>
-		public required string ModuleName { get; init; }
-
-		/// <summary>Metadata token of the member (or, for <see cref="BookmarkKind.Body"/>, the enclosing method).</summary>
-		public required uint Token { get; init; }
-
-		public required BookmarkKind Kind { get; init; }
-
-		/// <summary>IL offset within the method body; meaningful only for <see cref="BookmarkKind.Body"/>.</summary>
-		public int ILOffset { get; init; }
-
-		/// <summary>Visible document line number captured in the rendered text.</summary>
-		public int LineNumber {
-			get => lineNumber;
-			init => lineNumber = value;
-		}
-
-		/// <summary>
-		/// Display name of the anchored member. Navigation
-		/// resolves purely by token and does not compare this name: a token can legitimately point at
-		/// a compiler-generated member (e.g. a local function) whose resolved name differs from this
-		/// stored display name, and a name check would wrongly reject that valid navigation.
-		/// </summary>
-		public required string MemberName { get; init; }
-
-		/// <summary>Full display name of the tree node whose rendered text contains the bookmark.</summary>
-		public string? LocationNodeName { get; init; }
-
-		/// <summary>Decompiler editor view state captured when the bookmark was created.</summary>
-		public BookmarkViewState? ViewState { get; set; }
-
-		/// <summary>Location text shown in the bookmarks pane.</summary>
-		public string DisplayLocation {
-			get {
-				var nodeName = !string.IsNullOrEmpty(LocationNodeName)
-					? LocationNodeName
-					: ViewState?.SelectedTreeNodePath is { Count: > 0 } path
-					? path[^1]
-					: MemberName;
-				return LineNumber > 0
-					? string.Create(CultureInfo.InvariantCulture, $"{nodeName}:{LineNumber}")
-					: nodeName;
-			}
-		}
-
-		/// <summary>Updates the rendered line shown in the bookmarks pane after the current document resolves it.</summary>
-		public void UpdateRenderedLineNumber(int lineNumber)
-		{
-			if (lineNumber < 1 || this.lineNumber == lineNumber)
-				return;
-			this.lineNumber = lineNumber;
-			OnPropertyChanged(nameof(DisplayLocation));
-		}
-
-		/// <summary>
-		/// Identity used for toggle and merge-import deduplication: same assembly + same location
-		/// (token, plus IL offset or rendered line for anchors that need one) means the same bookmark.
-		/// </summary>
-		public string AnchorKey => $"{AssemblyFullName}|{ModuleName}|{Kind}|{Token}|{Kind switch { BookmarkKind.Body => ILOffset, BookmarkKind.Line => LineNumber, _ => -1 }}";
-	}
+        /// <summary>
+        /// Identity used for toggle and merge-import deduplication: same assembly + same location
+        /// (token, plus IL offset or rendered line for anchors that need one) means the same bookmark.
+        /// </summary>
+        public string AnchorKey => $"{AssemblyFullName}|{ModuleName}|{Kind}|{Token}|{Kind switch {BookmarkKind.Body => ILOffset, BookmarkKind.Line => LineNumber, _ => -1}}";
+    }
 }

@@ -15,19 +15,18 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 namespace ICSharpCode.ILSpy.Options
 {
-	/// <summary>
-	/// Strongly-typed metadata view for <see cref="IOptionPage"/> exports — <see cref="Order"/>
-	/// drives the tab order inside the Options page (lowest first). Concrete class with a
-	/// parameterless constructor because System.Composition (MEF2) requires that for
-	/// metadata views — the WPF host's same-named interface doesn't translate. The "I"
-	/// prefix is kept to mirror the WPF naming so the call sites read identically across
-	/// platforms.
-	/// </summary>
-	public sealed class IOptionsMetadata
-	{
-		public int Order { get; set; }
-	}
+    /// <summary>
+    /// Strongly-typed metadata view for <see cref="IOptionPage"/> exports — <see cref="Order"/>
+    /// drives the tab order inside the Options page (lowest first). Concrete class with a
+    /// parameterless constructor because System.Composition (MEF2) requires that for
+    /// metadata views — the WPF host's same-named interface doesn't translate. The "I"
+    /// prefix is kept to mirror the WPF naming so the call sites read identically across
+    /// platforms.
+    /// </summary>
+    public sealed class IOptionsMetadata
+    {
+        public int Order { get; set; }
+    }
 }

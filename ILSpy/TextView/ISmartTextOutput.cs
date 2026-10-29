@@ -15,42 +15,35 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
-
 using Avalonia.Controls;
-
 using AvaloniaEdit.Highlighting;
 using AvaloniaEdit.Rendering;
-
 using ICSharpCode.Decompiler;
 
 namespace ICSharpCode.ILSpy.TextView
 {
-	/// <summary>
-	/// Adds Avalonia-specific output features to <see cref="ITextOutput"/>: span-based
-	/// highlighting + inline UI elements rendered by <see cref="UIElementGenerator"/>.
-	/// </summary>
-	public interface ISmartTextOutput : ITextOutput
-	{
-		/// <summary>
-		/// Inserts an interactive UI element at the current position. The factory runs lazily
-		/// on the UI thread when the element generator first realises the row.
-		/// </summary>
-		void AddUIElement(Func<Control> element);
-
-		/// <summary>
-		/// Contributes a <see cref="VisualLineElementGenerator"/> (typically a regex-based
-		/// hyperlink generator) that the text view installs alongside the document.
-		/// </summary>
-		void AddVisualLineElementGenerator(VisualLineElementGenerator generator);
-
-		void BeginSpan(HighlightingColor highlightingColor);
-		void EndSpan();
-
-		/// <summary>
-		/// Title displayed in the document tab's header.
-		/// </summary>
-		string Title { get; set; }
-	}
+    /// <summary>
+    /// Adds Avalonia-specific output features to <see cref="ITextOutput"/>: span-based
+    /// highlighting + inline UI elements rendered by <see cref="UIElementGenerator"/>.
+    /// </summary>
+    public interface ISmartTextOutput : ITextOutput
+    {
+        /// <summary>
+        /// Inserts an interactive UI element at the current position. The factory runs lazily
+        /// on the UI thread when the element generator first realises the row.
+        /// </summary>
+        void AddUIElement(Func<Control> element);
+        /// <summary>
+        /// Contributes a <see cref="VisualLineElementGenerator"/> (typically a regex-based
+        /// hyperlink generator) that the text view installs alongside the document.
+        /// </summary>
+        void AddVisualLineElementGenerator(VisualLineElementGenerator generator);
+        void BeginSpan(HighlightingColor highlightingColor);
+        void EndSpan();
+        /// <summary>
+        /// Title displayed in the document tab's header.
+        /// </summary>
+        string Title { get; set; }
+    }
 }

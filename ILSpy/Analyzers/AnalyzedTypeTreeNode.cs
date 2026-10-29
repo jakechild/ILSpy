@@ -15,36 +15,83 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
-
 using AvaloniaEdit.Highlighting;
-
 using ICSharpCode.Decompiler.TypeSystem;
-
 using ICSharpCode.ILSpy.TreeNodes;
 
 namespace ICSharpCode.ILSpy.Analyzers.TreeNodes
 {
-	internal sealed class AnalyzedTypeTreeNode : AnalyzerEntityTreeNode
-	{
-		readonly ITypeDefinition analyzedType;
+    internal sealed class AnalyzedTypeTreeNode : AnalyzerEntityTreeNode
+    {
+        readonly ITypeDefinition analyzedType;
+        public AnalyzedTypeTreeNode(ITypeDefinition analyzedType, IEntity? source)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "57277fab-6f77-4062-80d1-c0d96c886fcb" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.analyzedType = analyzedType ?? throw new ArgumentNullException(nameof(analyzedType));
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "061ddbf9-f8fb-4880-ad39-037c5a02a571" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.SourceMember = source;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "41c31da6-d2b4-4eda-a958-4fef5169ccd3" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            LazyLoading = true;
+        }
 
-		public AnalyzedTypeTreeNode(ITypeDefinition analyzedType, IEntity? source)
-		{
-			this.analyzedType = analyzedType ?? throw new ArgumentNullException(nameof(analyzedType));
-			this.SourceMember = source;
-			LazyLoading = true;
-		}
+        public override IEntity Member => analyzedType;
+        public override object Text => CreateRichText()?.Text ?? Language.TypeToString(analyzedType);
 
-		public override IEntity Member => analyzedType;
+        protected override RichText? BuildRichText() => CreateMemberRichText("", TypeSignatureFlags);
+        public override object Icon => TypeTreeNode.GetIcon(analyzedType);
 
-		public override object Text => CreateRichText()?.Text ?? Language.TypeToString(analyzedType);
-
-		protected override RichText? BuildRichText() => CreateMemberRichText("", TypeSignatureFlags);
-
-		public override object Icon => TypeTreeNode.GetIcon(analyzedType);
-
-		protected override void LoadChildren() => AddAnalyzerChildren(analyzedType);
-	}
+        protected override void LoadChildren() => AddAnalyzerChildren(analyzedType);
+    }
 }

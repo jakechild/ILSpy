@@ -15,82 +15,241 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Threading;
-
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.Output;
 using ICSharpCode.Decompiler.TypeSystem;
 using ICSharpCode.ILSpyX;
 using ICSharpCode.ILSpyX.Abstractions;
 using ICSharpCode.ILSpyX.TreeView.PlatformAbstractions;
-
 using ICSharpCode.ILSpy.Languages;
 
 namespace ICSharpCode.ILSpy.TreeNodes
 {
-	/// <summary>
-	/// Single derived-type entry under a <see cref="DerivedTypesTreeNode"/>. Activating jumps
-	/// to the corresponding <see cref="TypeTreeNode"/>. Itself lazy-recursive — expanding a
-	/// derived-type entry walks one more level, surfacing types derived from <em>it</em>.
-	/// </summary>
-	public sealed class DerivedTypesEntryNode : ILSpyTreeNode, IMemberTreeNode
-	{
-		readonly AssemblyList list;
-		readonly ITypeDefinition type;
+    /// <summary>
+    /// Single derived-type entry under a <see cref="DerivedTypesTreeNode"/>. Activating jumps
+    /// to the corresponding <see cref="TypeTreeNode"/>. Itself lazy-recursive — expanding a
+    /// derived-type entry walks one more level, surfacing types derived from <em>it</em>.
+    /// </summary>
+    public sealed class DerivedTypesEntryNode : ILSpyTreeNode, IMemberTreeNode
+    {
+        readonly AssemblyList list;
+        readonly ITypeDefinition type;
+        public DerivedTypesEntryNode(AssemblyList list, ITypeDefinition type)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "e4424e52-977a-45b0-8c7a-06cd7511dd44" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.list = list;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "b9e76a37-aa7c-4586-a74a-4c000381bf00" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.type = type;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "db8ba12f-ef42-462c-b4fe-deb83dbb9c1c" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            LazyLoading = true;
+        }
 
-		public DerivedTypesEntryNode(AssemblyList list, ITypeDefinition type)
-		{
-			this.list = list;
-			this.type = type;
-			LazyLoading = true;
-		}
+        public override bool ShowExpander => !type.IsSealed && base.ShowExpander;
+        public override object Text => Language.TypeToString(type, ConversionFlags.None);
+        public override object? NavigationText => $"{Text} ({ICSharpCode.ILSpy.Properties.Resources.DerivedTypes})";
+        public override object Icon => TypeTreeNode.GetIcon(type);
 
-		public override bool ShowExpander => !type.IsSealed && base.ShowExpander;
+        protected override void LoadChildren()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "70e3404b-97d6-45de-a6d5-b4bf7fdfafc4" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            foreach (var entry in DerivedTypesTreeNode.FindDerivedTypes(list, LanguageService.CurrentLanguage, type, CancellationToken.None))
+                Children.Add(entry);
+        }
 
-		public override object Text => Language.TypeToString(type, ConversionFlags.None);
+        public override bool IsPublicAPI => type.Accessibility switch
+        {
+            Accessibility.Public or Accessibility.Internal or Accessibility.ProtectedOrInternal => true,
+            _ => false,
+        };
 
-		public override object? NavigationText => $"{Text} ({ICSharpCode.ILSpy.Properties.Resources.DerivedTypes})";
+        /// <summary>
+        /// Drops non-public entries under PublicOnly visibility, otherwise reports a match. It must
+        /// not report Recurse: the filter cascade's Recurse handling force-loads this node's lazy
+        /// children and hides the node when all of them are hidden, so a leaf derived type (no
+        /// further subclasses, hence no children) would vanish from the tree. The active search term
+        /// is deliberately not consulted: <see cref="LanguageSettings.SearchTermMatches"/> is a
+        /// no-op so the assembly tree stays independent of the search pane.
+        /// </summary>
+        public override FilterResult Filter(LanguageSettings settings)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "2cf35c89-0069-4f3b-8e1c-933a4b063430" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            if (settings.ShowApiLevel == ApiVisibility.PublicOnly && !IsPublicAPI)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "e756229b-3b6d-48a9-8a91-3ea51cf04710" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                return FilterResult.Hidden;
+            }
 
-		public override object Icon => TypeTreeNode.GetIcon(type);
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "e6708594-02d1-40d1-8d1f-2df04c05eaa4" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            return FilterResult.Match;
+        }
 
-		protected override void LoadChildren()
-		{
-			foreach (var entry in DerivedTypesTreeNode.FindDerivedTypes(list, LanguageService.CurrentLanguage, type, CancellationToken.None))
-				Children.Add(entry);
-		}
+        public override void ActivateItem(IPlatformRoutedEventArgs e)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "673d8c95-f17e-45bb-ae3b-f4610daecb2e" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            e.Handled = BaseTypesEntryNode.ActivateItem(this, type);
+        }
 
-		public override bool IsPublicAPI => type.Accessibility switch {
-			Accessibility.Public or Accessibility.Internal or Accessibility.ProtectedOrInternal => true,
-			_ => false,
-		};
+        public override void Decompile(Language language, ITextOutput output, DecompilationOptions options)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "9f8c4bf8-7e43-4486-b7bb-9e773fdd7072" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            language.WriteCommentLine(output, language.TypeToString(type, ConversionFlags.None));
+        }
 
-		/// <summary>
-		/// Drops non-public entries under PublicOnly visibility, otherwise reports a match. It must
-		/// not report Recurse: the filter cascade's Recurse handling force-loads this node's lazy
-		/// children and hides the node when all of them are hidden, so a leaf derived type (no
-		/// further subclasses, hence no children) would vanish from the tree. The active search term
-		/// is deliberately not consulted: <see cref="LanguageSettings.SearchTermMatches"/> is a
-		/// no-op so the assembly tree stays independent of the search pane.
-		/// </summary>
-		public override FilterResult Filter(LanguageSettings settings)
-		{
-			if (settings.ShowApiLevel == ApiVisibility.PublicOnly && !IsPublicAPI)
-				return FilterResult.Hidden;
-			return FilterResult.Match;
-		}
-
-		public override void ActivateItem(IPlatformRoutedEventArgs e)
-		{
-			e.Handled = BaseTypesEntryNode.ActivateItem(this, type);
-		}
-
-		public override void Decompile(Language language, ITextOutput output, DecompilationOptions options)
-		{
-			language.WriteCommentLine(output, language.TypeToString(type, ConversionFlags.None));
-		}
-
-		IEntity IMemberTreeNode.Member => type;
-	}
+        IEntity IMemberTreeNode.Member => type;
+    }
 }

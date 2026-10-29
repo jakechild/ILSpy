@@ -15,21 +15,18 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using Avalonia.Controls;
-
 using ICSharpCode.ILSpyX.TreeView;
 
 namespace ICSharpCode.ILSpy.Controls.TreeView
 {
-	/// <summary>
-	/// Container for a single <see cref="SharpTreeNode"/> row in a <see cref="SharpTreeView"/>.
-	/// Double-tap (activate / expand) is handled by the owning <see cref="SharpTreeView"/>.
-	/// </summary>
-	public class SharpTreeViewItem : ListBoxItem
-	{
-		public SharpTreeView? ParentTreeView { get; internal set; }
-
-		public SharpTreeNode? Node => DataContext as SharpTreeNode;
-	}
+    /// <summary>
+    /// Container for a single <see cref="SharpTreeNode"/> row in a <see cref="SharpTreeView"/>.
+    /// Double-tap (activate / expand) is handled by the owning <see cref="SharpTreeView"/>.
+    /// </summary>
+    public class SharpTreeViewItem : ListBoxItem
+    {
+        public SharpTreeView? ParentTreeView { get; internal set; }
+        public SharpTreeNode? Node => DataContext as SharpTreeNode;
+    }
 }

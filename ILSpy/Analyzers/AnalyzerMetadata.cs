@@ -15,20 +15,18 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 namespace ICSharpCode.ILSpy.Analyzers
 {
-	/// <summary>
-	/// Concrete metadata view consumed by <see cref="AnalyzerRegistry"/>. System.Composition
-	/// only projects metadata through a class with a parameterless constructor and public
-	/// settable properties — the shared <c>IAnalyzerMetadata</c> interface doesn't qualify.
-	/// Property names mirror <c>ExportAnalyzerAttribute</c>'s so the framework copies values
-	/// across by name.
-	/// </summary>
-	public sealed class AnalyzerMetadata
-	{
-		public string? Header { get; set; }
-
-		public int Order { get; set; }
-	}
+    /// <summary>
+    /// Concrete metadata view consumed by <see cref="AnalyzerRegistry"/>. System.Composition
+    /// only projects metadata through a class with a parameterless constructor and public
+    /// settable properties — the shared <c>IAnalyzerMetadata</c> interface doesn't qualify.
+    /// Property names mirror <c>ExportAnalyzerAttribute</c>'s so the framework copies values
+    /// across by name.
+    /// </summary>
+    public sealed class AnalyzerMetadata
+    {
+        public string? Header { get; set; }
+        public int Order { get; set; }
+    }
 }

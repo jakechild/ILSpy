@@ -15,26 +15,24 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Threading;
 using System.Threading.Tasks;
-
 using Avalonia.Media;
 
 namespace ICSharpCode.ILSpy.NuGetFeeds
 {
-	/// <summary>
-	/// Fetches a package's custom icon for the "Open from NuGet feed" dialog. The production
-	/// implementation (<see cref="NuGetIconLoader"/>) downloads and decodes the image; tests
-	/// substitute a fake so no network is involved.
-	/// </summary>
-	public interface INuGetIconLoader
-	{
-		/// <summary>
-		/// Downloads and decodes the icon at <paramref name="iconUrl"/>. Returns
-		/// <see langword="null"/> for anything that isn't a usable icon - a non-http(s) URL, a
-		/// network or decode failure, or cancellation - so callers simply keep the default icon.
-		/// </summary>
-		Task<IImage?> LoadIconAsync(string iconUrl, CancellationToken cancellationToken);
-	}
+    /// <summary>
+    /// Fetches a package's custom icon for the "Open from NuGet feed" dialog. The production
+    /// implementation (<see cref="NuGetIconLoader"/>) downloads and decodes the image; tests
+    /// substitute a fake so no network is involved.
+    /// </summary>
+    public interface INuGetIconLoader
+    {
+        /// <summary>
+        /// Downloads and decodes the icon at <paramref name="iconUrl"/>. Returns
+        /// <see langword="null"/> for anything that isn't a usable icon - a non-http(s) URL, a
+        /// network or decode failure, or cancellation - so callers simply keep the default icon.
+        /// </summary>
+        Task<IImage?> LoadIconAsync(string iconUrl, CancellationToken cancellationToken);
+    }
 }

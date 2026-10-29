@@ -15,24 +15,39 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using global::Avalonia.Controls;
 using global::Avalonia.Markup.Xaml;
 
 namespace ICSharpCode.ILSpy.Options.Panels
 {
-	public partial class DisplaySettingsPanel : UserControl
-	{
-		public DisplaySettingsPanel()
-		{
-			InitializeComponent();
-		}
+    public partial class DisplaySettingsPanel : UserControl
+    {
+        public DisplaySettingsPanel()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "88842a24-450b-492c-9a3f-681be8480b98" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            InitializeComponent();
+        }
 
-		void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-
-		// Commit-on-focus-loss for the size box: rewrites the text from the stored (clamped)
-		// value, so e.g. a typed "3" doesn't keep showing while 6 pt is what got stored.
-		void FontSizeBox_LostFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
-			=> (DataContext as DisplaySettingsViewModel)?.CommitFontSizeText();
-	}
+        void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+        // Commit-on-focus-loss for the size box: rewrites the text from the stored (clamped)
+        // value, so e.g. a typed "3" doesn't keep showing while 6 pt is what got stored.
+        void FontSizeBox_LostFocus(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => (DataContext as DisplaySettingsViewModel)?.CommitFontSizeText();
+    }
 }

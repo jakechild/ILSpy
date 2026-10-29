@@ -15,73 +15,175 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
-
 using ICSharpCode.Decompiler.Metadata;
 
 namespace ICSharpCode.ILSpy.Metadata.CorTables
 {
-	/// <summary>
-	/// View of the Event table — every CLR event the module's types declare. Each row
-	/// references the event's delegate type as a TypeDefOrRef coded token; add/remove/raise
-	/// accessor bindings live in MethodSemantics.
-	/// </summary>
-	public sealed class EventTableTreeNode : MetadataTableTreeNode<EventTableTreeNode.EventDefEntry>
-	{
-		public EventTableTreeNode(MetadataFile metadataFile)
-			: base(TableIndex.Event, metadataFile)
-		{
-		}
+    /// <summary>
+    /// View of the Event table — every CLR event the module's types declare. Each row
+    /// references the event's delegate type as a TypeDefOrRef coded token; add/remove/raise
+    /// accessor bindings live in MethodSemantics.
+    /// </summary>
+    public sealed class EventTableTreeNode : MetadataTableTreeNode<EventTableTreeNode.EventDefEntry>
+    {
+        public EventTableTreeNode(MetadataFile metadataFile) : base(TableIndex.Event, metadataFile)
+        {
+        }
 
-		protected override IReadOnlyList<EventDefEntry> LoadTable()
-		{
-			var list = new List<EventDefEntry>();
-			foreach (var row in metadataFile.Metadata.EventDefinitions)
-				list.Add(new EventDefEntry(metadataFile, row));
-			return list;
-		}
+        protected override IReadOnlyList<EventDefEntry> LoadTable()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "a58fe137-ae4b-4e98-9ca0-ee773a4f0aad" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            var list = new List<EventDefEntry>();
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "7193d14c-4c53-4732-8011-62b65307f97f" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            foreach (var row in metadataFile.Metadata.EventDefinitions)
+                list.Add(new EventDefEntry(metadataFile, row));
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "dd2e507f-3a8c-4f46-93e0-b9d599af1ffe" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            return list;
+        }
 
-		public sealed class EventDefEntry
-		{
-			readonly MetadataFile metadataFile;
-			readonly EventDefinitionHandle handle;
-			readonly EventDefinition eventDef;
+        public sealed class EventDefEntry
+        {
+            readonly MetadataFile metadataFile;
+            readonly EventDefinitionHandle handle;
+            readonly EventDefinition eventDef;
+            public int RID => MetadataTokens.GetRowNumber(handle);
 
-			public int RID => MetadataTokens.GetRowNumber(handle);
+            [ColumnInfo("X8")]
+            public int Token => MetadataTokens.GetToken(handle);
 
-			[ColumnInfo("X8")]
-			public int Token => MetadataTokens.GetToken(handle);
+            [ColumnInfo("X8")]
+            public int Offset => GetRowOffset(metadataFile, TableIndex.Event, RID);
 
-			[ColumnInfo("X8")]
-			public int Offset => GetRowOffset(metadataFile, TableIndex.Event, RID);
+            [ColumnInfo("X8")]
+            public EventAttributes Attributes => eventDef.Attributes;
+            public object AttributesTooltip => new FlagsTooltip
+            {
+                FlagGroup.CreateMultipleChoiceGroup(typeof(EventAttributes), selectedValue: (int)eventDef.Attributes, includeAll: false),
+            };
+            public string Name => metadataFile.Metadata.GetString(eventDef.Name);
+            public string NameTooltip => $"{MetadataTokens.GetHeapOffset(eventDef.Name):X} \"{Name}\"";
 
-			[ColumnInfo("X8")]
-			public EventAttributes Attributes => eventDef.Attributes;
+            [ColumnInfo("X8", Kind = ColumnKind.Token)]
+            public int Type => MetadataTokens.GetToken(eventDef.Type);
 
-			public object AttributesTooltip => new FlagsTooltip {
-				FlagGroup.CreateMultipleChoiceGroup(typeof(EventAttributes), selectedValue: (int)eventDef.Attributes, includeAll: false),
-			};
+            string? typeTooltip;
+            public string? TypeTooltip => GenerateTooltip(ref typeTooltip, metadataFile, eventDef.Type);
 
-			public string Name => metadataFile.Metadata.GetString(eventDef.Name);
-
-			public string NameTooltip => $"{MetadataTokens.GetHeapOffset(eventDef.Name):X} \"{Name}\"";
-
-			[ColumnInfo("X8", Kind = ColumnKind.Token)]
-			public int Type => MetadataTokens.GetToken(eventDef.Type);
-
-			string? typeTooltip;
-			public string? TypeTooltip => GenerateTooltip(ref typeTooltip, metadataFile, eventDef.Type);
-
-			public EventDefEntry(MetadataFile metadataFile, EventDefinitionHandle handle)
-			{
-				this.metadataFile = metadataFile;
-				this.handle = handle;
-				eventDef = metadataFile.Metadata.GetEventDefinition(handle);
-			}
-		}
-	}
+            public EventDefEntry(MetadataFile metadataFile, EventDefinitionHandle handle)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "9df36fcb-7fd2-4a76-9c8d-825cab3cb0b0" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.metadataFile = metadataFile;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "12a89878-1a1a-429a-8ab0-2cc71a6b3ed1" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.handle = handle;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "d6fa1f4e-d011-4d4f-ac62-d57668b8922a" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                eventDef = metadataFile.Metadata.GetEventDefinition(handle);
+            }
+        }
+    }
 }

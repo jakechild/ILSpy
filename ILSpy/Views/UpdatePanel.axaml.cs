@@ -15,24 +15,41 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace ICSharpCode.ILSpy.Views
 {
-	/// <summary>
-	/// Toolbar-strip banner shown under the main toolbar when an update is available
-	/// or the user explicitly invoked Help → Check For Updates and asked to see the
-	/// outcome. View is data-template-driven by <see cref="ViewModels.UpdatePanelViewModel"/>.
-	/// </summary>
-	public partial class UpdatePanel : UserControl
-	{
-		public UpdatePanel()
-		{
-			InitializeComponent();
-		}
+    /// <summary>
+    /// Toolbar-strip banner shown under the main toolbar when an update is available
+    /// or the user explicitly invoked Help → Check For Updates and asked to see the
+    /// outcome. View is data-template-driven by <see cref="ViewModels.UpdatePanelViewModel"/>.
+    /// </summary>
+    public partial class UpdatePanel : UserControl
+    {
+        public UpdatePanel()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "383fd62d-e6e3-4d3a-ae3c-98a3c3a4f084" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            InitializeComponent();
+        }
 
-		void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-	}
+        void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+    }
 }

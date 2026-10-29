@@ -15,58 +15,162 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
-
 using ICSharpCode.Decompiler.Metadata;
 
 namespace ICSharpCode.ILSpy.Metadata.DebugTables
 {
-	/// <summary>
-	/// View of the ImportScope table — chains of <c>using</c> / <c>using static</c> / alias
-	/// imports active inside a LocalScope. Each row points at its parent ImportScope (or nil
-	/// for a root scope) and holds an Imports blob describing the imports in that scope.
-	/// </summary>
-	public sealed class ImportScopeTableTreeNode : MetadataTableTreeNode<ImportScopeTableTreeNode.ImportScopeEntry>
-	{
-		public ImportScopeTableTreeNode(MetadataFile metadataFile)
-			: base(TableIndex.ImportScope, metadataFile)
-		{
-		}
+    /// <summary>
+    /// View of the ImportScope table — chains of <c>using</c> / <c>using static</c> / alias
+    /// imports active inside a LocalScope. Each row points at its parent ImportScope (or nil
+    /// for a root scope) and holds an Imports blob describing the imports in that scope.
+    /// </summary>
+    public sealed class ImportScopeTableTreeNode : MetadataTableTreeNode<ImportScopeTableTreeNode.ImportScopeEntry>
+    {
+        public ImportScopeTableTreeNode(MetadataFile metadataFile) : base(TableIndex.ImportScope, metadataFile)
+        {
+        }
 
-		protected override IReadOnlyList<ImportScopeEntry> LoadTable()
-		{
-			var list = new List<ImportScopeEntry>();
-			foreach (var row in metadataFile.Metadata.ImportScopes)
-				list.Add(new ImportScopeEntry(metadataFile, row));
-			return list;
-		}
+        protected override IReadOnlyList<ImportScopeEntry> LoadTable()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "8a5bfa17-7fe4-4e29-a667-a8998f7a0af7" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            var list = new List<ImportScopeEntry>();
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "589a6b14-ae0e-4a1d-9eb8-859db2814895" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            foreach (var row in metadataFile.Metadata.ImportScopes)
+                list.Add(new ImportScopeEntry(metadataFile, row));
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "18394181-f51e-4a97-9308-928a242f6c09" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            return list;
+        }
 
-		public sealed class ImportScopeEntry
-		{
-			readonly MetadataFile metadataFile;
-			readonly ImportScopeHandle handle;
-			readonly ImportScope scope;
+        public sealed class ImportScopeEntry
+        {
+            readonly MetadataFile metadataFile;
+            readonly ImportScopeHandle handle;
+            readonly ImportScope scope;
+            public int RID => MetadataTokens.GetRowNumber(handle);
 
-			public int RID => MetadataTokens.GetRowNumber(handle);
+            [ColumnInfo("X8")]
+            public int Token => MetadataTokens.GetToken(handle);
 
-			[ColumnInfo("X8")]
-			public int Token => MetadataTokens.GetToken(handle);
+            [ColumnInfo("X8", Kind = ColumnKind.Token)]
+            public int Parent => MetadataTokens.GetToken(scope.Parent);
 
-			[ColumnInfo("X8", Kind = ColumnKind.Token)]
-			public int Parent => MetadataTokens.GetToken(scope.Parent);
+            [ColumnInfo("X8", Kind = ColumnKind.HeapOffset)]
+            public int Imports => MetadataTokens.GetHeapOffset(scope.ImportsBlob);
 
-			[ColumnInfo("X8", Kind = ColumnKind.HeapOffset)]
-			public int Imports => MetadataTokens.GetHeapOffset(scope.ImportsBlob);
-
-			public ImportScopeEntry(MetadataFile metadataFile, ImportScopeHandle handle)
-			{
-				this.metadataFile = metadataFile;
-				this.handle = handle;
-				scope = metadataFile.Metadata.GetImportScope(handle);
-			}
-		}
-	}
+            public ImportScopeEntry(MetadataFile metadataFile, ImportScopeHandle handle)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "6915bf2c-c9d8-4b07-b095-18e3c4c8468f" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.metadataFile = metadataFile;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "94367788-2f57-46c0-bf1f-173258446aae" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.handle = handle;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "abc28b6f-c509-4a08-a6fe-51ad01a4563e" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                scope = metadataFile.Metadata.GetImportScope(handle);
+            }
+        }
+    }
 }

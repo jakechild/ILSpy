@@ -15,30 +15,64 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using ICSharpCode.Decompiler.Metadata;
 using ICSharpCode.Decompiler.TypeSystem;
 using ICSharpCode.ILSpyX;
 
 namespace ICSharpCode.ILSpy
 {
-	public static class ExtensionMethods
-	{
-		/// <summary>
-		/// Returns the cached type system for <paramref name="file"/> derived from the user's
-		/// current decompiler settings (see
-		/// <see cref="SettingsService.CreateEffectiveDecompilerSettings"/>). Everything that
-		/// resolves entities for display — tree nodes, search, metadata views — should go
-		/// through this so it agrees with what decompilation produces and shares the
-		/// per-module type-system cache instead of materialising another instance. Falls back
-		/// to default settings when composition is unavailable (design-time, minimal test
-		/// hosts).
-		/// </summary>
-		public static ICompilation? GetTypeSystemWithCurrentOptionsOrNull(this MetadataFile file)
-		{
-			var settings = AppEnv.AppComposition.TryGetExport<SettingsService>()?.CreateEffectiveDecompilerSettings()
-				?? new Decompiler.DecompilerSettings();
-			return file.GetTypeSystemWithDecompilerSettingsOrNull(settings);
-		}
-	}
+    public static class ExtensionMethods
+    {
+        /// <summary>
+        /// Returns the cached type system for <paramref name="file"/> derived from the user's
+        /// current decompiler settings (see
+        /// <see cref="SettingsService.CreateEffectiveDecompilerSettings"/>). Everything that
+        /// resolves entities for display — tree nodes, search, metadata views — should go
+        /// through this so it agrees with what decompilation produces and shares the
+        /// per-module type-system cache instead of materialising another instance. Falls back
+        /// to default settings when composition is unavailable (design-time, minimal test
+        /// hosts).
+        /// </summary>
+        public static ICompilation? GetTypeSystemWithCurrentOptionsOrNull(this MetadataFile file)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "a1721e38-8722-47db-8b55-91801d759619" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            var settings = AppEnv.AppComposition.TryGetExport<SettingsService>()?.CreateEffectiveDecompilerSettings() ?? new Decompiler.DecompilerSettings();
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "5de5838f-65bc-44b6-9d54-6e925e5df2d3" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            return file.GetTypeSystemWithDecompilerSettingsOrNull(settings);
+        }
+    }
 }

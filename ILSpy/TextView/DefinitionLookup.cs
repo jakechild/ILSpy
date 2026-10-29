@@ -15,23 +15,18 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 
 namespace ICSharpCode.ILSpy.TextView
 {
-	/// <summary>
-	/// Maps reference targets to character offsets where their definitions appear in the
-	/// rendered text. Lets in-document navigation jump to the declaration without leaving the tab.
-	/// </summary>
-	public sealed class DefinitionLookup
-	{
-		readonly Dictionary<object, int> definitions = new();
-
-		public int GetDefinitionPosition(object definition)
-			=> definitions.TryGetValue(definition, out var offset) ? offset : -1;
-
-		public void AddDefinition(object definition, int offset)
-			=> definitions[definition] = offset;
-	}
+    /// <summary>
+    /// Maps reference targets to character offsets where their definitions appear in the
+    /// rendered text. Lets in-document navigation jump to the declaration without leaving the tab.
+    /// </summary>
+    public sealed class DefinitionLookup
+    {
+        readonly Dictionary<object, int> definitions = new();
+        public int GetDefinitionPosition(object definition) => definitions.TryGetValue(definition, out var offset) ? offset : -1;
+        public void AddDefinition(object definition, int offset) => definitions[definition] = offset;
+    }
 }

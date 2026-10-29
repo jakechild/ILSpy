@@ -15,26 +15,25 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using AvaloniaEdit.Highlighting;
 
 namespace ICSharpCode.ILSpy.Controls.TreeView
 {
-	/// <summary>
-	/// Implemented by tree nodes whose label should render as syntax-highlighted rich text
-	/// (coloured runs, bold type names) instead of the plain string from
-	/// <c>SharpTreeNode.Text</c>. The cell template renders <see cref="CreateRichText"/> when
-	/// it returns a value and falls back to the plain <c>Text</c> otherwise, so a node's
-	/// <c>Text</c> stays the authoritative plain-string representation for search, copy and
-	/// keyboard navigation.
-	/// </summary>
-	public interface IRichTextNode
-	{
-		/// <summary>
-		/// The highlighted label, or <see langword="null"/> to fall back to the plain
-		/// <c>Text</c> (e.g. when no entity is available or the active language has no
-		/// highlighting). The returned text must equal the plain <c>Text</c>.
-		/// </summary>
-		RichText? CreateRichText();
-	}
+    /// <summary>
+    /// Implemented by tree nodes whose label should render as syntax-highlighted rich text
+    /// (coloured runs, bold type names) instead of the plain string from
+    /// <c>SharpTreeNode.Text</c>. The cell template renders <see cref="CreateRichText"/> when
+    /// it returns a value and falls back to the plain <c>Text</c> otherwise, so a node's
+    /// <c>Text</c> stays the authoritative plain-string representation for search, copy and
+    /// keyboard navigation.
+    /// </summary>
+    public interface IRichTextNode
+    {
+        /// <summary>
+        /// The highlighted label, or <see langword="null"/> to fall back to the plain
+        /// <c>Text</c> (e.g. when no entity is available or the active language has no
+        /// highlighting). The returned text must equal the plain <c>Text</c>.
+        /// </summary>
+        RichText? CreateRichText();
+    }
 }

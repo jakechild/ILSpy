@@ -15,41 +15,104 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
-
 using AvaloniaEdit.Highlighting;
-
 using ICSharpCode.Decompiler.Output;
 using ICSharpCode.Decompiler.TypeSystem;
-
 using ICSharpCode.ILSpy.TreeNodes;
 
 namespace ICSharpCode.ILSpy.Analyzers.TreeNodes
 {
-	internal class AnalyzedMethodTreeNode : AnalyzerEntityTreeNode
-	{
-		readonly IMethod analyzedMethod;
-		readonly string prefix;
+    internal class AnalyzedMethodTreeNode : AnalyzerEntityTreeNode
+    {
+        readonly IMethod analyzedMethod;
+        readonly string prefix;
+        public AnalyzedMethodTreeNode(IMethod analyzedMethod, IEntity? source, string prefix = "")
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "4ea49678-b72a-4f10-ac04-2c553f4232b7" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.analyzedMethod = analyzedMethod ?? throw new ArgumentNullException(nameof(analyzedMethod));
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "fddae916-1e9f-4084-893e-1ee09b069404" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.SourceMember = source;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "82d2f542-026b-4d80-86c7-dcbcff481675" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.prefix = prefix;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "c4d10c4d-9677-4b52-bfdf-d0cafec32cf8" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            LazyLoading = true;
+        }
 
-		public AnalyzedMethodTreeNode(IMethod analyzedMethod, IEntity? source, string prefix = "")
-		{
-			this.analyzedMethod = analyzedMethod ?? throw new ArgumentNullException(nameof(analyzedMethod));
-			this.SourceMember = source;
-			this.prefix = prefix;
-			LazyLoading = true;
-		}
+        public override IEntity Member => analyzedMethod;
+        public override object Text => CreateRichText()?.Text ?? prefix + Language.EntityToString(analyzedMethod, ConversionFlags.ShowDeclaringType | ConversionFlags.UseFullyQualifiedEntityNames);
 
-		public override IEntity Member => analyzedMethod;
+        protected override RichText? BuildRichText() => CreateMemberRichText(prefix, MemberSignatureFlags);
+        public override object Icon => MethodTreeNode.GetIcon(analyzedMethod);
 
-		public override object Text => CreateRichText()?.Text
-			?? prefix + Language.EntityToString(analyzedMethod,
-				ConversionFlags.ShowDeclaringType | ConversionFlags.UseFullyQualifiedEntityNames);
-
-		protected override RichText? BuildRichText() => CreateMemberRichText(prefix, MemberSignatureFlags);
-
-		public override object Icon => MethodTreeNode.GetIcon(analyzedMethod);
-
-		protected override void LoadChildren() => AddAnalyzerChildren(analyzedMethod);
-	}
+        protected override void LoadChildren() => AddAnalyzerChildren(analyzedMethod);
+    }
 }

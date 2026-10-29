@@ -15,28 +15,25 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Composition;
-
 using ICSharpCode.ILSpy.Properties;
-
 using ICSharpCode.ILSpy.Docking;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	[ExportMainMenuCommand(Header = nameof(Resources.Window_CloseAllDocuments), ParentMenuID = nameof(Resources._Window), MenuCategory = "Window", MenuOrder = 1)]
-	[Shared]
-	[method: ImportingConstructor]
-	sealed class CloseAllDocumentsCommand(DockWorkspace dockWorkspace) : SimpleCommand
-	{
-		public override void Execute(object? parameter) => dockWorkspace.CloseAllTabs();
-	}
+    [ExportMainMenuCommand(Header = nameof(Resources.Window_CloseAllDocuments), ParentMenuID = nameof(Resources._Window), MenuCategory = "Window", MenuOrder = 1)]
+    [Shared]
+    [method: ImportingConstructor]
+    sealed class CloseAllDocumentsCommand(DockWorkspace dockWorkspace) : SimpleCommand
+    {
+        public override void Execute(object? parameter) => dockWorkspace.CloseAllTabs();
+    }
 
-	[ExportMainMenuCommand(Header = nameof(Resources.Window_ResetLayout), ParentMenuID = nameof(Resources._Window), MenuCategory = "Window", MenuOrder = 2)]
-	[Shared]
-	[method: ImportingConstructor]
-	sealed class ResetLayoutCommand(DockWorkspace dockWorkspace) : SimpleCommand
-	{
-		public override void Execute(object? parameter) => dockWorkspace.ResetLayout();
-	}
+    [ExportMainMenuCommand(Header = nameof(Resources.Window_ResetLayout), ParentMenuID = nameof(Resources._Window), MenuCategory = "Window", MenuOrder = 2)]
+    [Shared]
+    [method: ImportingConstructor]
+    sealed class ResetLayoutCommand(DockWorkspace dockWorkspace) : SimpleCommand
+    {
+        public override void Execute(object? parameter) => dockWorkspace.ResetLayout();
+    }
 }

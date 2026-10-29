@@ -15,49 +15,79 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Composition;
-
 using ICSharpCode.ILSpy.Properties;
 
 namespace ICSharpCode.ILSpy.TextView
 {
-	/// <summary>
-	/// Right-click → Copy. Lives in the editor's context menu only (gated by
-	/// <see cref="TextViewContext.TextView"/>); enabled when the AvaloniaEdit selection is
-	/// non-empty. Keyboard Ctrl+C is handled by AvaloniaEdit natively — this entry exists
-	/// for the right-click affordance on machines without a keyboard or for discoverability.
-	/// </summary>
-	[ExportContextMenuEntry(Header = nameof(Resources.Copy), Category = nameof(Resources.Editor), Order = 100)]
-	[Shared]
-	public sealed class CopyContextMenuEntry : IContextMenuEntry
-	{
-		public bool IsVisible(TextViewContext context) => context.TextView != null;
+    /// <summary>
+    /// Right-click → Copy. Lives in the editor's context menu only (gated by
+    /// <see cref="TextViewContext.TextView"/>); enabled when the AvaloniaEdit selection is
+    /// non-empty. Keyboard Ctrl+C is handled by AvaloniaEdit natively — this entry exists
+    /// for the right-click affordance on machines without a keyboard or for discoverability.
+    /// </summary>
+    [ExportContextMenuEntry(Header = nameof(Resources.Copy), Category = nameof(Resources.Editor), Order = 100)]
+    [Shared]
+    public sealed class CopyContextMenuEntry : IContextMenuEntry
+    {
+        public bool IsVisible(TextViewContext context) => context.TextView != null;
+        public bool IsEnabled(TextViewContext context) => context.TextView is { } view && view.Editor.SelectionLength > 0;
+        public void Execute(TextViewContext context)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "412bd998-1dd3-492f-a3ae-ba9f91d07ce9" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            // Copy as text + syntax/semantic-coloured HTML; fall back to plain copy if nothing selected.
+            if (context.TextView is { } view && !HtmlClipboardCopy.Copy(view.Editor, view.SemanticHighlightingModel))
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "1a09a774-6244-4e94-bc60-2a1585521ee8" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                view.Editor.Copy();
+            }
+        }
+    }
 
-		public bool IsEnabled(TextViewContext context)
-			=> context.TextView is { } view && view.Editor.SelectionLength > 0;
-
-		public void Execute(TextViewContext context)
-		{
-			// Copy as text + syntax/semantic-coloured HTML; fall back to plain copy if nothing selected.
-			if (context.TextView is { } view && !HtmlClipboardCopy.Copy(view.Editor, view.SemanticHighlightingModel))
-				view.Editor.Copy();
-		}
-	}
-
-	/// <summary>
-	/// Right-click → Select All. Keyboard Ctrl+A is handled natively by AvaloniaEdit;
-	/// this entry surfaces the same action from the right-click menu.
-	/// </summary>
-	[ExportContextMenuEntry(Header = nameof(Resources.Select), Category = nameof(Resources.Editor), Order = 110)]
-	[Shared]
-	public sealed class SelectAllContextMenuEntry : IContextMenuEntry
-	{
-		public bool IsVisible(TextViewContext context) => context.TextView != null;
-
-		public bool IsEnabled(TextViewContext context) => context.TextView != null;
-
-		public void Execute(TextViewContext context)
-			=> context.TextView?.Editor.SelectAll();
-	}
+    /// <summary>
+    /// Right-click → Select All. Keyboard Ctrl+A is handled natively by AvaloniaEdit;
+    /// this entry surfaces the same action from the right-click menu.
+    /// </summary>
+    [ExportContextMenuEntry(Header = nameof(Resources.Select), Category = nameof(Resources.Editor), Order = 110)]
+    [Shared]
+    public sealed class SelectAllContextMenuEntry : IContextMenuEntry
+    {
+        public bool IsVisible(TextViewContext context) => context.TextView != null;
+        public bool IsEnabled(TextViewContext context) => context.TextView != null;
+        public void Execute(TextViewContext context) => context.TextView?.Editor.SelectAll();
+    }
 }

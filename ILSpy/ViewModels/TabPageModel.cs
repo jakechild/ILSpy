@@ -15,23 +15,21 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using CommunityToolkit.Mvvm.ComponentModel;
-
 using Dock.Model.Mvvm.Controls;
 
 namespace ICSharpCode.ILSpy.ViewModels
 {
-	public abstract partial class TabPageModel : Document
-	{
-		/// <summary>
-		/// True when the toolbar's Language / Language-Version pickers should be enabled while
-		/// this tab is active. Defaults to <see langword="true"/> — meaningful for decompiler
-		/// output (C# / IL / ILAst). Metadata views and the compare view set this to
-		/// <see langword="false"/> in their ctors because language choice doesn't affect what
-		/// they render.
-		/// </summary>
-		[ObservableProperty]
-		private bool supportsLanguageSwitching = true;
-	}
+    public abstract partial class TabPageModel : Document
+    {
+        /// <summary>
+        /// True when the toolbar's Language / Language-Version pickers should be enabled while
+        /// this tab is active. Defaults to <see langword="true"/> — meaningful for decompiler
+        /// output (C# / IL / ILAst). Metadata views and the compare view set this to
+        /// <see langword="false"/> in their ctors because language choice doesn't affect what
+        /// they render.
+        /// </summary>
+        [ObservableProperty]
+        private bool supportsLanguageSwitching = true;
+    }
 }

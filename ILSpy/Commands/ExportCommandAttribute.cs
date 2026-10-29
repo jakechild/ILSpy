@@ -15,84 +15,81 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Composition;
 using System.Windows.Input;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	/// <summary>
-	/// Concrete metadata view for main-menu commands. System.Composition (lightweight MEF)
-	/// requires metadata views to be a concrete class with a parameterless or
-	/// IDictionary-typed constructor — interfaces aren't supported as views like they are in
-	/// the full <c>System.ComponentModel.Composition</c>. The runtime auto-populates these
-	/// properties from the matching properties on the export's <see cref="MetadataAttribute"/>.
-	/// </summary>
-	public class MainMenuCommandMetadata
-	{
-		public string? MenuID { get; set; }
-		public string? MenuIcon { get; set; }
-		public string? Header { get; set; }
-		public string? ParentMenuID { get; set; }
-		public string? MenuCategory { get; set; }
-		public string? InputGestureText { get; set; }
-		public bool IsEnabled { get; set; } = true;
-		public double MenuOrder { get; set; }
-	}
+    /// <summary>
+    /// Concrete metadata view for main-menu commands. System.Composition (lightweight MEF)
+    /// requires metadata views to be a concrete class with a parameterless or
+    /// IDictionary-typed constructor — interfaces aren't supported as views like they are in
+    /// the full <c>System.ComponentModel.Composition</c>. The runtime auto-populates these
+    /// properties from the matching properties on the export's <see cref="MetadataAttribute"/>.
+    /// </summary>
+    public class MainMenuCommandMetadata
+    {
+        public string? MenuID { get; set; }
+        public string? MenuIcon { get; set; }
+        public string? Header { get; set; }
+        public string? ParentMenuID { get; set; }
+        public string? MenuCategory { get; set; }
+        public string? InputGestureText { get; set; }
+        public bool IsEnabled { get; set; } = true;
+        public double MenuOrder { get; set; }
+    }
 
-	/// <summary>
-	/// Marks a command for inclusion in the main menu. The metadata drives where in the
-	/// menu hierarchy the entry appears, what icon / accelerator it carries, and which
-	/// command instance is invoked.
-	/// </summary>
-	[MetadataAttribute]
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public class ExportMainMenuCommandAttribute : ExportAttribute
-	{
-		public ExportMainMenuCommandAttribute()
-			: base("MainMenuCommand", typeof(ICommand))
-		{
-		}
+    /// <summary>
+    /// Marks a command for inclusion in the main menu. The metadata drives where in the
+    /// menu hierarchy the entry appears, what icon / accelerator it carries, and which
+    /// command instance is invoked.
+    /// </summary>
+    [MetadataAttribute]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class ExportMainMenuCommandAttribute : ExportAttribute
+    {
+        public ExportMainMenuCommandAttribute() : base("MainMenuCommand", typeof(ICommand))
+        {
+        }
 
-		public string? MenuID { get; set; }
-		public string? MenuIcon { get; set; }
-		public string? Header { get; set; }
-		public string? ParentMenuID { get; set; }
-		public string? MenuCategory { get; set; }
-		public string? InputGestureText { get; set; }
-		public bool IsEnabled { get; set; } = true;
-		public double MenuOrder { get; set; }
-	}
+        public string? MenuID { get; set; }
+        public string? MenuIcon { get; set; }
+        public string? Header { get; set; }
+        public string? ParentMenuID { get; set; }
+        public string? MenuCategory { get; set; }
+        public string? InputGestureText { get; set; }
+        public bool IsEnabled { get; set; } = true;
+        public double MenuOrder { get; set; }
+    }
 
-	/// <summary>
-	/// Metadata view for toolbar commands.
-	/// </summary>
-	public class ToolbarCommandMetadata
-	{
-		public string? ToolbarIcon { get; set; }
-		public string? ToolTip { get; set; }
-		public string? ToolbarCategory { get; set; }
-		public double ToolbarOrder { get; set; }
-	}
+    /// <summary>
+    /// Metadata view for toolbar commands.
+    /// </summary>
+    public class ToolbarCommandMetadata
+    {
+        public string? ToolbarIcon { get; set; }
+        public string? ToolTip { get; set; }
+        public string? ToolbarCategory { get; set; }
+        public double ToolbarOrder { get; set; }
+    }
 
-	/// <summary>
-	/// Marks a command for inclusion in the main toolbar. A single command class can carry
-	/// both this attribute and <see cref="ExportMainMenuCommandAttribute"/>, surfacing the
-	/// same handler in the menu and the toolbar.
-	/// </summary>
-	[MetadataAttribute]
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-	public class ExportToolbarCommandAttribute : ExportAttribute
-	{
-		public ExportToolbarCommandAttribute()
-			: base("ToolbarCommand", typeof(ICommand))
-		{
-		}
+    /// <summary>
+    /// Marks a command for inclusion in the main toolbar. A single command class can carry
+    /// both this attribute and <see cref="ExportMainMenuCommandAttribute"/>, surfacing the
+    /// same handler in the menu and the toolbar.
+    /// </summary>
+    [MetadataAttribute]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class ExportToolbarCommandAttribute : ExportAttribute
+    {
+        public ExportToolbarCommandAttribute() : base("ToolbarCommand", typeof(ICommand))
+        {
+        }
 
-		public string? ToolbarIcon { get; set; }
-		public string? ToolTip { get; set; }
-		public string? ToolbarCategory { get; set; }
-		public double ToolbarOrder { get; set; }
-	}
+        public string? ToolbarIcon { get; set; }
+        public string? ToolTip { get; set; }
+        public string? ToolbarCategory { get; set; }
+        public double ToolbarOrder { get; set; }
+    }
 }

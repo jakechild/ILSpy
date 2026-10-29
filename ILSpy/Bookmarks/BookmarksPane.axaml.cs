@@ -15,29 +15,118 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using Avalonia.Controls;
 using Avalonia.Input;
 
 namespace ICSharpCode.ILSpy.Bookmarks
 {
-	public partial class BookmarksPane : UserControl
-	{
-		public BookmarksPane()
-		{
-			InitializeComponent();
-			BookmarkGrid.DoubleTapped += OnRowDoubleTapped;
-		}
+    public partial class BookmarksPane : UserControl
+    {
+        public BookmarksPane()
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "5a939cdd-0120-485c-be27-f54b023fd920" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            InitializeComponent();
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "5ffdaad3-0e12-47b3-ab1a-3abb53b0f571" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            BookmarkGrid.DoubleTapped += OnRowDoubleTapped;
+        }
 
-		// Double-click anywhere on a row jumps to its location. The Name column stays editable
-		// through the DataGrid's own cell editing (it does not start on a double-tap).
-		void OnRowDoubleTapped(object? sender, TappedEventArgs e)
-		{
-			if (DataContext is BookmarksPaneModel model && BookmarkGrid.SelectedItem is Bookmark bookmark)
-			{
-				model.ActivateAsync(bookmark).HandleExceptions();
-				e.Handled = true;
-			}
-		}
-	}
+        // Double-click anywhere on a row jumps to its location. The Name column stays editable
+        // through the DataGrid's own cell editing (it does not start on a double-tap).
+        void OnRowDoubleTapped(object? sender, TappedEventArgs e)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "d6fca571-8ba4-45a1-8af4-07e35646e5d4" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            if (DataContext is BookmarksPaneModel model && BookmarkGrid.SelectedItem is Bookmark bookmark)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "eab073c6-c63c-4178-9cfa-96891695d9e2" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                model.ActivateAsync(bookmark).HandleExceptions();
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "65562e67-6b77-4a87-9e43-a4f3afe4f2b7" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                e.Handled = true;
+            }
+        }
+    }
 }

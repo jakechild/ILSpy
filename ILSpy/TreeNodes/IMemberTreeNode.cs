@@ -15,20 +15,19 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using ICSharpCode.Decompiler.TypeSystem;
 
 namespace ICSharpCode.ILSpy.TreeNodes
 {
-	/// <summary>
-	/// Contract implemented by every tree node that wraps a TypeSystem entity (types,
-	/// methods, fields, properties, events). Lets context-menu entries and other generic
-	/// tooling that wants the underlying <see cref="IEntity"/> reach it without knowing
-	/// which concrete tree-node class it has on hand.
-	/// </summary>
-	public interface IMemberTreeNode
-	{
-		/// <summary>The underlying entity, or null when it cannot be resolved.</summary>
-		IEntity? Member { get; }
-	}
+    /// <summary>
+    /// Contract implemented by every tree node that wraps a TypeSystem entity (types,
+    /// methods, fields, properties, events). Lets context-menu entries and other generic
+    /// tooling that wants the underlying <see cref="IEntity"/> reach it without knowing
+    /// which concrete tree-node class it has on hand.
+    /// </summary>
+    public interface IMemberTreeNode
+    {
+        /// <summary>The underlying entity, or null when it cannot be resolved.</summary>
+        IEntity? Member { get; }
+    }
 }

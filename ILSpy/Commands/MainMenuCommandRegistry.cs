@@ -15,7 +15,6 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -23,23 +22,40 @@ using System.Windows.Input;
 
 namespace ICSharpCode.ILSpy.Commands
 {
-	/// <summary>
-	/// MEF aggregator for [ExportMainMenuCommand]-tagged commands. We need this indirection
-	/// because System.Composition only resolves [ImportMany] on constructor parameters of
-	/// MEF-managed parts, but the menu UserControl is instantiated by AXAML's parameterless
-	/// loader and can only retrieve parts via <c>GetExport&lt;T&gt;()</c>.
-	/// </summary>
-	[Export]
-	[Shared]
-	public sealed class MainMenuCommandRegistry
-	{
-		[ImportingConstructor]
-		public MainMenuCommandRegistry(
-			[ImportMany("MainMenuCommand")] IEnumerable<ExportFactory<ICommand, MainMenuCommandMetadata>> commands)
-		{
-			Commands = commands.ToArray();
-		}
+    /// <summary>
+    /// MEF aggregator for [ExportMainMenuCommand]-tagged commands. We need this indirection
+    /// because System.Composition only resolves [ImportMany] on constructor parameters of
+    /// MEF-managed parts, but the menu UserControl is instantiated by AXAML's parameterless
+    /// loader and can only retrieve parts via <c>GetExport&lt;T&gt;()</c>.
+    /// </summary>
+    [Export]
+    [Shared]
+    public sealed class MainMenuCommandRegistry
+    {
+        [ImportingConstructor]
+        public MainMenuCommandRegistry([ImportMany("MainMenuCommand")] IEnumerable<ExportFactory<ICommand, MainMenuCommandMetadata>> commands)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "c91ca4ca-6ca0-469c-bb83-13e2c7821986" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Commands = commands.ToArray();
+        }
 
-		public IReadOnlyList<ExportFactory<ICommand, MainMenuCommandMetadata>> Commands { get; }
-	}
+        public IReadOnlyList<ExportFactory<ICommand, MainMenuCommandMetadata>> Commands { get; }
+    }
 }

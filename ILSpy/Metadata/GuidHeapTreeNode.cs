@@ -15,50 +15,118 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
-
 using ICSharpCode.Decompiler.Metadata;
 
 namespace ICSharpCode.ILSpy.Metadata
 {
-	/// <summary>
-	/// View of #GUID — a contiguous array of 16-byte GUIDs indexed (1-based) by ModuleDef
-	/// rows and a handful of other tables. Indexing starts at 1 because index 0 is reserved
-	/// for "no GUID".
-	/// </summary>
-	public sealed class GuidHeapTreeNode : MetadataHeapTreeNode<GuidHeapTreeNode.GuidHeapEntry>
-	{
-		public GuidHeapTreeNode(MetadataFile metadataFile)
-			: base(HandleKind.Guid, metadataFile)
-		{
-		}
+    /// <summary>
+    /// View of #GUID — a contiguous array of 16-byte GUIDs indexed (1-based) by ModuleDef
+    /// rows and a handful of other tables. Indexing starts at 1 because index 0 is reserved
+    /// for "no GUID".
+    /// </summary>
+    public sealed class GuidHeapTreeNode : MetadataHeapTreeNode<GuidHeapTreeNode.GuidHeapEntry>
+    {
+        public GuidHeapTreeNode(MetadataFile metadataFile) : base(HandleKind.Guid, metadataFile)
+        {
+        }
 
-		protected override string HeapName => "Guid Heap";
+        protected override string HeapName => "Guid Heap";
 
-		protected override void LoadEntries(MetadataReader metadata, List<GuidHeapEntry> list)
-		{
-			int count = metadata.GetHeapSize(HeapIndex.Guid) >> 4;
-			for (int i = 1; i <= count; i++)
-				list.Add(new GuidHeapEntry(metadata, MetadataTokens.GuidHandle(i)));
-		}
+        protected override void LoadEntries(MetadataReader metadata, List<GuidHeapEntry> list)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "4cd3ad89-6f7e-4eb6-95db-50d505fe230b" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            int count = metadata.GetHeapSize(HeapIndex.Guid) >> 4;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "5b09d13b-1ba6-4d10-8a82-cc65627c51f5" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            for (int i = 1; i <= count; i++)
+                list.Add(new GuidHeapEntry(metadata, MetadataTokens.GuidHandle(i)));
+        }
 
-		public sealed class GuidHeapEntry
-		{
-			readonly MetadataReader metadata;
-			readonly GuidHandle handle;
+        public sealed class GuidHeapEntry
+        {
+            readonly MetadataReader metadata;
+            readonly GuidHandle handle;
+            public int Index => metadata.GetHeapOffset(handle);
+            public int Length => 16;
+            public string Value => metadata.GetGuid(handle).ToString();
 
-			public int Index => metadata.GetHeapOffset(handle);
-			public int Length => 16;
-			public string Value => metadata.GetGuid(handle).ToString();
-
-			public GuidHeapEntry(MetadataReader metadata, GuidHandle handle)
-			{
-				this.metadata = metadata;
-				this.handle = handle;
-			}
-		}
-	}
+            public GuidHeapEntry(MetadataReader metadata, GuidHandle handle)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "fbbba8b1-434e-4540-96e0-f8e6fa914622" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.metadata = metadata;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "fca57b0f-c0e6-4218-add0-e03a5bd64b49" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.handle = handle;
+            }
+        }
+    }
 }

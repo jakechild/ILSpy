@@ -15,53 +15,135 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Collections.Generic;
-
 using ICSharpCode.ILSpyX;
 
 namespace ICSharpCode.ILSpy.Analyzers
 {
-	/// <summary>
-	/// Sentinel row shown under an <see cref="AnalyzerSearchTreeNode"/> when the analyser
-	/// threw. The user-facing <see cref="SharpTreeNode.Text"/> is a one-line summary, the
-	/// <see cref="SharpTreeNode.ToolTip"/> shows the full exception (stack trace included),
-	/// and <see cref="Details"/> is the same payload that
-	/// <see cref="CopyAnalyzerErrorContextMenuEntry"/> writes to the clipboard.
-	/// </summary>
-	internal sealed class AnalyzerErrorNode : AnalyzerTreeNode
-	{
-		readonly string summary;
+    /// <summary>
+    /// Sentinel row shown under an <see cref="AnalyzerSearchTreeNode"/> when the analyser
+    /// threw. The user-facing <see cref="SharpTreeNode.Text"/> is a one-line summary, the
+    /// <see cref="SharpTreeNode.ToolTip"/> shows the full exception (stack trace included),
+    /// and <see cref="Details"/> is the same payload that
+    /// <see cref="CopyAnalyzerErrorContextMenuEntry"/> writes to the clipboard.
+    /// </summary>
+    internal sealed class AnalyzerErrorNode : AnalyzerTreeNode
+    {
+        readonly string summary;
+        public AnalyzerErrorNode(string summary, string details)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "5e8e2785-7188-477d-9951-ec7aa55d94dc" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.summary = summary;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "4c5f3f70-4651-429e-9dfc-3995e83a1891" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Details = details;
+        }
 
-		public AnalyzerErrorNode(string summary, string details)
-		{
-			this.summary = summary;
-			Details = details;
-		}
+        public AnalyzerErrorNode(Exception exception)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "9c4fcc31-fc25-477f-a194-a401561b1595" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            ArgumentNullException.ThrowIfNull(exception);
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "d86a4ed5-80bf-4fdf-a77b-02ce483372f1" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            this.summary = "Error: " + exception.Message;
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "001b5728-6031-44c6-918c-afc30c42d0d4" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Details = exception.ToString();
+        }
 
-		public AnalyzerErrorNode(Exception exception)
-		{
-			ArgumentNullException.ThrowIfNull(exception);
-			this.summary = "Error: " + exception.Message;
-			Details = exception.ToString();
-		}
+        public override object Text => summary;
+        public override object Icon => Images.AssemblyWarning;
+        public override object? ToolTip => Details;
+        /// <summary>
+        /// Full exception text — typically <see cref="Exception.ToString"/> — for the copy
+        /// entry to put on the clipboard. Plain <see cref="SharpTreeNode.Text"/> is kept
+        /// short so the row stays compact in the tree.
+        /// </summary>
+        public string Details { get; }
 
-		public override object Text => summary;
-
-		public override object Icon => Images.AssemblyWarning;
-
-		public override object? ToolTip => Details;
-
-		/// <summary>
-		/// Full exception text — typically <see cref="Exception.ToString"/> — for the copy
-		/// entry to put on the clipboard. Plain <see cref="SharpTreeNode.Text"/> is kept
-		/// short so the row stays compact in the tree.
-		/// </summary>
-		public string Details { get; }
-
-		public override bool HandleAssemblyListChanged(
-			ICollection<LoadedAssembly> removedAssemblies,
-			ICollection<LoadedAssembly> addedAssemblies) => true;
-	}
+        public override bool HandleAssemblyListChanged(ICollection<LoadedAssembly> removedAssemblies, ICollection<LoadedAssembly> addedAssemblies) => true;
+    }
 }

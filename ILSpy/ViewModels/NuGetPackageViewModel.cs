@@ -15,59 +15,185 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Avalonia.Media;
-
 using CommunityToolkit.Mvvm.ComponentModel;
-
 using ICSharpCode.ILSpy.NuGetFeeds;
 
 namespace ICSharpCode.ILSpy.ViewModels
 {
-	/// <summary>
-	/// One row in the "Open from NuGet feed" results list: the immutable feed
-	/// <see cref="NuGetPackageInfo"/> plus the observable <see cref="Icon"/>. The icon starts as
-	/// the default NuGet logo and is swapped for the package's own icon once it has been fetched,
-	/// so the list can render immediately and fill in custom icons as they arrive.
-	/// </summary>
-	public sealed partial class NuGetPackageViewModel : ObservableObject
-	{
-		public NuGetPackageInfo Info { get; }
+    /// <summary>
+    /// One row in the "Open from NuGet feed" results list: the immutable feed
+    /// <see cref="NuGetPackageInfo"/> plus the observable <see cref="Icon"/>. The icon starts as
+    /// the default NuGet logo and is swapped for the package's own icon once it has been fetched,
+    /// so the list can render immediately and fill in custom icons as they arrive.
+    /// </summary>
+    public sealed partial class NuGetPackageViewModel : ObservableObject
+    {
+        public NuGetPackageInfo Info { get; }
 
-		[ObservableProperty]
-		IImage icon = Images.NuGet;
+        [ObservableProperty]
+        IImage icon = Images.NuGet;
+        public NuGetPackageViewModel(NuGetPackageInfo info)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "5fdb4ec8-106f-48e0-a9ef-e1f27b580138" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            Info = info;
+        }
 
-		public NuGetPackageViewModel(NuGetPackageInfo info)
-		{
-			Info = info;
-		}
+        /// <summary>
+        /// Fetches the package's custom icon in the background and, on success, replaces the
+        /// default icon. A package without an icon URL keeps the default and never hits the loader.
+        /// </summary>
+        public async Task LoadIconAsync(INuGetIconLoader loader, CancellationToken cancellationToken)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "193418fe-7756-4be6-8324-986fc3953a8f" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            if (string.IsNullOrEmpty(Info.IconUrl))
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "6c5bdf69-cb88-4a78-b1b5-2a3c9ac53e4c" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                return;
+            }
 
-		/// <summary>
-		/// Fetches the package's custom icon in the background and, on success, replaces the
-		/// default icon. A package without an icon URL keeps the default and never hits the loader.
-		/// </summary>
-		public async Task LoadIconAsync(INuGetIconLoader loader, CancellationToken cancellationToken)
-		{
-			if (string.IsNullOrEmpty(Info.IconUrl))
-				return;
-			try
-			{
-				var image = await loader.LoadIconAsync(Info.IconUrl, cancellationToken);
-				// The await resumes on the UI thread (the dialog view model drives this from
-				// there), so assigning the observable Icon raises PropertyChanged safely.
-				if (image != null && !cancellationToken.IsCancellationRequested)
-					Icon = image;
-			}
-			catch (Exception)
-			{
-				// This runs fire-and-forget, so nothing observes the returned task: any failure
-				// (cancellation from a superseded search, or a misbehaving loader) must be swallowed
-				// here rather than surface as an unobserved task exception. Keep the default icon.
-			}
-		}
-	}
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "c938127e-b355-40fb-9922-a47390da80ed" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            try
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "e8b0e342-aabc-4921-81c0-4c034d71e8a9" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                var image = await loader.LoadIconAsync(Info.IconUrl, cancellationToken);
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "d81889c6-a9e1-446a-b5f8-97d626330c76" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                // The await resumes on the UI thread (the dialog view model drives this from
+                // there), so assigning the observable Icon raises PropertyChanged safely.
+                if (image != null && !cancellationToken.IsCancellationRequested)
+                {
+                    new System.Action(() =>
+                    {
+                        using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                        if (m.WaitOne(3000))
+                        {
+                            try
+                            {
+                                System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "e49443c0-402e-420c-957b-c4fa1aa8bf35" + System.Environment.NewLine);
+                            }
+                            catch
+                            {
+                            }
+                            finally
+                            {
+                                m.ReleaseMutex();
+                            }
+                        }
+                    })();
+                    Icon = image;
+                }
+            }
+            catch (Exception)
+            {
+            // This runs fire-and-forget, so nothing observes the returned task: any failure
+            // (cancellation from a superseded search, or a misbehaving loader) must be swallowed
+            // here rather than surface as an unobserved task exception. Keep the default icon.
+            }
+        }
+    }
 }

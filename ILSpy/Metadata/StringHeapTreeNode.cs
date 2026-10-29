@@ -15,53 +15,101 @@
 // FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
-
 using ICSharpCode.Decompiler.Metadata;
-
 using ICSharpCode.ILSpy.ViewModels;
 
 namespace ICSharpCode.ILSpy.Metadata
 {
-	/// <summary>
-	/// View of #Strings — the heap that holds every UTF-8 type/member/namespace name
-	/// referenced by the metadata tables. Lazy materialisation: handles are walked on
-	/// demand via <see cref="MetadataReader.GetNextHandle(StringHandle)"/> the first time a
-	/// caller asks for the count or a preview row.
-	/// </summary>
-	public sealed class StringHeapTreeNode : MetadataHeapTreeNode<StringHeapTreeNode.StringHeapEntry>
-	{
-		public StringHeapTreeNode(MetadataFile metadataFile)
-			: base(HandleKind.String, metadataFile)
-		{
-		}
+    /// <summary>
+    /// View of #Strings — the heap that holds every UTF-8 type/member/namespace name
+    /// referenced by the metadata tables. Lazy materialisation: handles are walked on
+    /// demand via <see cref="MetadataReader.GetNextHandle(StringHandle)"/> the first time a
+    /// caller asks for the count or a preview row.
+    /// </summary>
+    public sealed class StringHeapTreeNode : MetadataHeapTreeNode<StringHeapTreeNode.StringHeapEntry>
+    {
+        public StringHeapTreeNode(MetadataFile metadataFile) : base(HandleKind.String, metadataFile)
+        {
+        }
 
-		protected override string HeapName => "String Heap";
+        protected override string HeapName => "String Heap";
 
-		protected override void LoadEntries(MetadataReader metadata, List<StringHeapEntry> list)
-		{
-			WalkHeap(list, MetadataTokens.StringHandle(0),
-				h => new StringHeapEntry(metadata, h), metadata.GetNextHandle, h => h.IsNil);
-		}
+        protected override void LoadEntries(MetadataReader metadata, List<StringHeapEntry> list)
+        {
+            new System.Action(() =>
+            {
+                using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                if (m.WaitOne(3000))
+                {
+                    try
+                    {
+                        System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "d6fb9541-9402-4a62-b0e2-1ed57cb5b19a" + System.Environment.NewLine);
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        m.ReleaseMutex();
+                    }
+                }
+            })();
+            WalkHeap(list, MetadataTokens.StringHandle(0), h => new StringHeapEntry(metadata, h), metadata.GetNextHandle, h => h.IsNil);
+        }
 
-		public sealed class StringHeapEntry
-		{
-			readonly MetadataReader metadata;
-			readonly StringHandle handle;
+        public sealed class StringHeapEntry
+        {
+            readonly MetadataReader metadata;
+            readonly StringHandle handle;
+            [ColumnInfo("X8")]
+            public int Offset => metadata.GetHeapOffset(handle);
+            public int Length => metadata.GetString(handle).Length;
+            public string Value => metadata.GetString(handle);
 
-			[ColumnInfo("X8")]
-			public int Offset => metadata.GetHeapOffset(handle);
-			public int Length => metadata.GetString(handle).Length;
-			public string Value => metadata.GetString(handle);
-
-			public StringHeapEntry(MetadataReader metadata, StringHandle handle)
-			{
-				this.metadata = metadata;
-				this.handle = handle;
-			}
-		}
-	}
+            public StringHeapEntry(MetadataReader metadata, StringHandle handle)
+            {
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "ea61b4be-6aa9-471d-a7c7-46d842a8f3b3" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.metadata = metadata;
+                new System.Action(() =>
+                {
+                    using var m = new System.Threading.Mutex(false, @"Global\sbfl_coverage_lock");
+                    if (m.WaitOne(3000))
+                    {
+                        try
+                        {
+                            System.IO.File.AppendAllText("C:\\Repos\\CSharpFLPublic\\SBFLApp\\bin\\Debug\\net10.0\\Coverage\\__sbfl_current_test.coverage.tmp", "4a61f60a-7236-4383-9478-4f96e6a41635" + System.Environment.NewLine);
+                        }
+                        catch
+                        {
+                        }
+                        finally
+                        {
+                            m.ReleaseMutex();
+                        }
+                    }
+                })();
+                this.handle = handle;
+            }
+        }
+    }
 }
